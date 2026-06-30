@@ -1,32 +1,34 @@
 ---
-title : "Clean up"
+title : "Resource cleanup"
 date : 2024-01-01
 weight : 6
 chapter : false
-pre : " <b> 5.6. </b> "
+pre : " <b> 5.6 </b> "
 ---
-Congratulations on completing this workshop! 
-In this workshop, you learned architecture patterns for accessing Amazon S3 without using the Public Internet. 
-+ By creating a gateway endpoint, you enabled direct communication between EC2 resources and Amazon S3, without traversing an Internet Gateway. 
-+ By creating an interface endpoint you extended S3 connectivity to resources running in your on-premises data center via AWS Site-to-Site VPN or Direct Connect. 
 
-#### clean up
-1. Navigate to Hosted Zones on the left side of Route 53 console. Click the name of *s3.us-east-1.amazonaws.com* zone. Click Delete and confirm deletion by typing delete. 
+## Objectives
 
-![hosted zone](/images/5-Workshop/5.6-Cleanup/delete-zone.png)
+After completing the workshop, a resource cleanup step is needed to avoid unnecessary costs and keep the environment tidy.
 
-2. Disassociate the Route 53 Resolver Rule - myS3Rule from "VPC Onprem" and Delete it. 
+## Suggested cleanup order
 
-![hosted zone](/images/5-Workshop/5.6-Cleanup/vpc.png)
+1. Disable or pause GitHub Actions workflows if no longer deploying.
+2. Reduce ECS service/task count or delete ECS cluster if workshop is completed.
+3. Delete API Gateway, VPC Link, Public ALB, Internal ALB, and target groups.
+4. Delete RDS Proxy, RDS instance, Secrets Manager secret, and unnecessary snapshots.
+5. Delete ECR images/repositories if no longer needed.
+6. Empty and delete S3 buckets used for artifacts or backups if this is a lab account.
+7. Delete CloudWatch log groups, dashboards, alarms, and SNS topic if no longer used.
+8. Delete NAT Gateway, route tables, subnets, security groups, and finally the VPC.
 
-4. Open the CloudFormation console  and delete the two CloudFormation Stacks that you created for this lab:
-+ PLOnpremSetup
-+ PLCloudSetup
+## Points to note
 
-![delete stack](/images/5-Workshop/5.6-Cleanup/delete-stack.png)
+- Don't accidentally delete resources being used for other environments.
+- Check billing after cleanup to ensure no high-cost resources remain like NAT Gateway, ALB, ECS, or RDS.
+- If this is a long-term demo environment, you can just pause some components instead of deleting completely.
 
-5. Delete S3 buckets
-+ Open S3 console
-+ Choose the bucket we created for the lab, click and confirm empty. Click delete and confirm delete.
+## Suggested images to add
 
-![delete s3](/images/5-Workshop/5.6-Cleanup/delete-s3.png)
+- Resource list before deletion.
+- Deleting ECS/ALB/RDS.
+- Billing or resource list after cleanup.

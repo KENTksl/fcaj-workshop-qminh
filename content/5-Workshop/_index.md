@@ -5,23 +5,29 @@ weight: 5
 chapter: false
 pre: " <b> 5. </b> "
 ---
-# Secure Hybrid Access to S3 using VPC Endpoints
+# Workshop to deploy GlobalMart infrastructure on AWS
 
 #### Overview
 
-**AWS PrivateLink** provides private connectivity to AWS services from VPCs and your on-premises networks, without exposing your traffic to the Public Internet.
+This section serves as a deployment framework guide for the **GlobalMart** project based on the architecture diagram and content in the `Proposal` section. The workshop focuses on building DevOps/Platform Engineering infrastructure in a production-ready manner, including CI/CD pipelines, Multi-AZ networking layer, ECS runtime, secure data layer, centralized monitoring, and backup-alert mechanisms.
 
-In this lab, you will learn how to create, configure, and test VPC endpoints that enable your workloads to reach AWS services without traversing the Public Internet.
+In each section, I've created a content template based on your project so you can add images, actual parameters, and deployment results later.
 
-You will create two types of endpoints to access Amazon S3: a Gateway VPC endpoint, and an Interface VPC endpoint. These two types of VPC endpoints offer different benefits depending on if you are accessing Amazon S3 from the cloud or your on-premises location
-+ **Gateway** - Create a gateway endpoint to send traffic to Amazon S3 or DynamoDB using private IP addresses.You route traffic from your VPC to the gateway endpoint using route tables.
-+ **Interface** - Create an interface endpoint to send traffic to endpoint services that use a Network Load Balancer to distribute traffic. Traffic destined for the endpoint service is resolved using DNS.
+#### Workshop scope
+
+- Prepare source code, IAM roles, ECR, and artifact bucket.
+- Set up GitHub Actions, ECR, and ECS update flow to automate CI/CD.
+- Build Multi-AZ VPC, NAT Gateway, route tables, and security groups.
+- Deploy ECS Fargate for frontend/backend, Public ALB, Internal ALB, API Gateway, and VPC Link.
+- Configure RDS MySQL Multi-AZ, Secrets Manager, and RDS Proxy.
+- Set up CloudWatch Logs, metrics, alarms, SNS, and backups.
+- Create testing framework, security review, and resource cleanup.
 
 #### Content
 
-1. [Workshop overview](5.1-Workshop-overview)
-2. [Prerequiste](5.2-Prerequiste/)
-3. [Access S3 from VPC](5.3-S3-vpc/)
-4. [Access S3 from On-premises](5.4-S3-onprem/)
-5. [VPC Endpoint Policies (Bonus)](5.5-Policy/)
-6. [Clean up](5.6-Cleanup/)
+1. [Workshop overview](5.1-Workshop-overview/)
+2. [Prerequisites](5.2-Prerequiste/)
+3. [Set up source, ECR, and CI/CD pipeline](5.3-S3-vpc/)
+4. [Deploy runtime, data, and networking](5.4-S3-onprem/)
+5. [Security, optimization, and extension checks](5.5-Policy/)
+6. [Resource cleanup](5.6-Cleanup/)

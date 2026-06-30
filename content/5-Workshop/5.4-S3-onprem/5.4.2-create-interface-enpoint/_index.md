@@ -1,40 +1,55 @@
 ---
-title : "Create an S3 Interface endpoint"
+title : "Deploy ECS, ALB, API Gateway, and VPC Link"
 date : 2024-01-01
 weight : 2
 chapter : false
 pre : " <b> 5.4.2 </b> "
 ---
 
-In this section you will create and test an S3 interface endpoint using the simulated on-premises environment deployed as part of this workshop.
+## Objectives
 
-1. Return to the Amazon VPC menu. In the navigation pane, choose Endpoints, then click Create Endpoint.
+Bring frontend and backend into the runtime environment, while configuring request reception and routing layers according to the project architecture.
 
-2. In Create endpoint console:
-+ Name the interface endpoint
-+ In Service category, choose **aws services** 
+## Implementation steps
 
-![name](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint1.png)
+1. **Create ECS Cluster and task definitions**
+   - Create ECS Cluster using AWS Fargate.
+   - Create separate task definitions for frontend and backend.
+   - Configure CPU, memory, port mapping, logging, and basic environment variables.
 
-3.  In the Search box, type S3 and press Enter. Select the endpoint named com.amazonaws.us-east-1.s3. Ensure that the Type column indicates Interface.
+2. **Deploy ECS services**
+   - Create services for frontend and backend in private subnets.
+   - Configure desired count and autoscaling if you use it in your project.
 
-![service](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint2.png)
+3. **Create Public ALB**
+   - Create Internet-facing ALB to receive external requests.
+   - Attach appropriate target group for frontend service.
+   - Configure listener, health check, and routing rules if needed.
 
-4. For VPC, select VPC Cloud from the drop-down.
-+ Expand **Additional settings** and ensure that Enable DNS name is *not* selected (we will use this in the next part of the workshop)
+4. **Create Internal ALB**
+   - Create Internal ALB to distribute requests to backend service in VPC.
+   - Attach backend target group and configure internal listener.
 
-![vpc](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint3.png)
+5. **Create API Gateway and VPC Link**
+   - Create API Gateway as entry point for backend.
+   - Create VPC Link to connect API Gateway with Internal ALB.
+   - Configure `/api` route or business routes appropriate for your application.
 
-5. Select 2 subnets in the following AZs: us-east-1a and us-east-1b
+## Desired access flow
 
-![subnets](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint4.png)
+- Users access the system through Public ALB.
+- Frontend is served from the front ECS service.
+- Frontend or client calls API through API Gateway.
+- API Gateway uses VPC Link to access Internal ALB.
+- Internal ALB forwards requests to backend ECS service.
 
-6. For Security group, choose SGforS3Endpoint:
+## Expected results
 
-![sg](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint5.png)
+After this step, frontend and backend are both running on ECS and have a clear request path from the Internet to the business logic layer.
 
-7. Keep the default policy - full access and click Create endpoint
+## Suggested images to add
 
-![success](/images/5-Workshop/5.4-S3-onprem/s3-interface-endpoint-success.png)
-
-Congratulation on successfully creating S3 interface endpoint. In the next step, we will test the interface endpoint.
+- ECS Cluster and ECS services.
+- Frontend and backend task definitions.
+- Public ALB and target group.
+- API Gateway, VPC Link, and Internal ALB.

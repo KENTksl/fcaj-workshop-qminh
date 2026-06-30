@@ -1,95 +1,171 @@
 ---
-title : "Test the Gateway Endpoint"
+title : "Configure GitHub Actions and test CI/CD"
 date : 2024-01-01 
 weight : 2
 chapter : false
 pre : " <b> 5.3.2 </b> "
 ---
 
-#### Create S3 bucket
+## Objectives
 
-1. Navigate to **S3 management console**
-2. In the Bucket console, choose **Create bucket**
+Complete the automated build and deploy flow so that each code update can be consistently deployed to the system.
 
-![Create bucket](/images/5-Workshop/5.3-S3-vpc/create-bucket.png)
+## Implementation steps
 
-3. In **the Create bucket console**
-+ **Name the bucket**: choose a name that hasn't been given to any bucket globally (hint: lab number and your name)
+1. **Create GitHub Actions workflow**
+- At the root of your source code directory on Local machine (or directly on GitHub), create the directory structure following GitHub Actions standards: `.github/workflows/`.
+- Create a new file inside this directory and name it **`deploy.yml`**.
+- Copy the entire optimized script below to paste into the `deploy.yml` file. This script has been securely handling environment variable flow via `os.environ` in Python to avoid CLI syntax errors and has integrated automatic email sending:
 
-![Bucket name](/images/5-Workshop/5.3-S3-vpc/bucket-name.png)
+```yml
+name: Build and Deploy to ECS
 
-+ Leave other fields as they are (default)
-+ Scroll down and choose **Create bucket**
+on:
+  push:
+    branches: [main]
 
-![Create](/images/5-Workshop/5.3-S3-vpc/create-button.png) 
+env:
+  AWS_REGION: ap-southeast-1
+  ECR_FRONTEND: 307257806722.dkr.ecr.ap-southeast-1.amazonaws.com/globalmart-frontend
+  ECR_BACKEND: 307257806722.dkr.ecr.ap-southeast-1.amazonaws.com/globalmart-backend
+  ECS_CLUSTER: globalmart-cluster
+  ECS_SERVICE_FRONTEND: globalmart-frontend-task
+  ECS_SERVICE_BACKEND: globalmart-backend-task
 
-+ Successfully create S3 bucket.
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
 
-![Success](/images/5-Workshop/5.3-S3-vpc/bucket-success.png)
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-#### Connect to EC2 with session manager
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-+ For this workshop, you will use **AWS Session Manager** to access several **EC2 instances**. **Session Manager** is a fully managed **AWS Systems Manager** capability that allows you to manage your **Amazon EC2 instances**  and on-premises virtual machines (VMs) through an interactive one-click browser-based shell. Session Manager provides secure and auditable instance management without the need to open inbound ports, maintain bastion hosts, or manage SSH keys.
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
 
-+ First cloud journey [Lab](https://000058.awsstudygroup.com/1-introduce/) for indepth understanding of Session manager.
+      - name: Build and push Frontend
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          docker build -t $ECR_FRONTEND:$IMAGE_TAG -t $ECR_FRONTEND:latest ./globalmart-app
+          docker push $ECR_FRONTEND:$IMAGE_TAG
+          docker push $ECR_FRONTEND:latest
 
-1. In the **AWS Management Console**, start typing ```Systems Manager``` in the quick search box and press **Enter**:
+      - name: Build and push Backend
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          docker build -t $ECR_BACKEND:$IMAGE_TAG -t $ECR_BACKEND:latest ./globalmart-api
+          docker push $ECR_BACKEND:$IMAGE_TAG
+          docker push $ECR_BACKEND:latest
 
-![system manager](/images/5-Workshop/5.3-S3-vpc/sm.png)
+      - name: Deploy Frontend to ECS
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          TASK_DEF=$(aws ecs describe-task-definition \
+            --task-definition globalmart-frontend-task \
+            --region $AWS_REGION \
+            --query 'taskDefinition' \
+            --output json)
+          NEW_TASK_DEF=$(echo $TASK_DEF | python3 -c "
+          import json, sys
+          td = json.load(sys.stdin)
+          for c in td['containerDefinitions']:
+              c['image'] = '$ECR_FRONTEND:$IMAGE_TAG'
+          for key in ['taskDefinitionArn','revision','status','requiresAttributes','compatibilities','registeredAt','registeredBy']:
+              td.pop(key, None)
+          print(json.dumps(td))
+          ")
+          NEW_TASK_ARN=$(aws ecs register-task-definition \
+            --region $AWS_REGION \
+            --cli-input-json "$NEW_TASK_DEF" \
+            --query 'taskDefinition.taskDefinitionArn' \
+            --output text)
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE_FRONTEND \
+            --task-definition $NEW_TASK_ARN \
+            --force-new-deployment \
+            --region $AWS_REGION
+          echo "Frontend deployed: $IMAGE_TAG"
 
-2. From the **Systems Manager** menu, find **Node Management** in the left menu and click **Session Manager**:
+      - name: Deploy Backend to ECS
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          TASK_DEF=$(aws ecs describe-task-definition \
+            --task-definition globalmart-backend-task \
+            --region $AWS_REGION \
+            --query 'taskDefinition' \
+            --output json)
+          NEW_TASK_DEF=$(echo $TASK_DEF | python3 -c "
+          import json, sys
+          td = json.load(sys.stdin)
+          for c in td['containerDefinitions']:
+              c['image'] = '$ECR_BACKEND:$IMAGE_TAG'
+          for key in ['taskDefinitionArn','revision','status','requiresAttributes','compatibilities','registeredAt','registeredBy']:
+              td.pop(key, None)
+          print(json.dumps(td))
+          ")
+          NEW_TASK_ARN=$(aws ecs register-task-definition \
+            --region $AWS_REGION \
+            --cli-input-json "$NEW_TASK_DEF" \
+            --query 'taskDefinition.taskDefinitionArn' \
+            --output text)
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE_BACKEND \
+            --task-definition $NEW_TASK_ARN \
+            --force-new-deployment \
+            --region $AWS_REGION
+          echo "Backend deployed: $IMAGE_TAG"
 
-![system manager](/images/5-Workshop/5.3-S3-vpc/sm1.png)
+      - name: Deployment complete
+        run: |
+          echo "Deploy triggered successfully"
+          echo "Image tag: ${{ github.sha }}"
+          echo "Check ECS Console in 2-3 minutes"
+```
 
-3. Click **Start Session**, and select **the EC2 instance** named **Test-Gateway-Endpoint**. 
-{{% notice info %}}
-This EC2 instance is already running in "VPC Cloud" and will be used to test connectivity to Amazon S3 through the Gateway endpoint you just created (s3-gwe). {{% /notice %}}
+2. **Execute packaging and pushing Docker Image to Amazon ECR**
+- Authenticate login with Amazon ECR
+```
+aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 307257806722.dkr.ecr.ap-southeast-1.amazonaws.com
+```
+- Build and push frontend and backend images according to respective Dockerfiles to Amazon ECR.
+```
+# Frontend
+docker build -t globalmart-frontend ./frontend
+docker tag globalmart-frontend:latest 307257806722.dkr.ecr.ap-southeast-1.amazonaws.com/globalmart-frontend:latest
+docker push 307257806722.dkr.ecr.ap-southeast-1.amazonaws.com/globalmart-frontend:latest
+```
 
-![Start session](/images/5-Workshop/5.3-S3-vpc/start-session.png)
+```
+# Backend
+docker build -t globalmart-backend ./backend
+docker tag globalmart-backend:latest 307257806722.dkr.ecr.ap-southeast-1.amazonaws.com/globalmart-backend:latest
+docker push 307257806722.dkr.ecr.ap-southeast-1.amazonaws.com/globalmart-backend:latest
+```
 
-**Session Manager** will open a new browser tab with a shell prompt: sh-4.2 $
+## Points to verify
 
-![Success](/images/5-Workshop/5.3-S3-vpc/start-session-success.png)
+- Workflow runs on correct branch and correct trigger.
+- Image is built with correct tag and pushed successfully to ECR.
+- ECS service receives new revision and rolls out successfully.
+- Frontend/backend still passes health check after deployment.
 
-You have successfully start a session - connect to the EC2 instance in VPC cloud. In the next step, we will create a S3 bucket and a file in it. 
+## Expected results
 
-#### Create a file and upload to s3 bucket
+After this step, the system has an automated CI/CD flow to build and deploy new versions, reducing manual operations in operations.
 
-1. Change to the ssm-user's home directory by typing ```cd ~``` in the CLI
-
-![Change user's dir](/images/5-Workshop/5.3-S3-vpc/cli1.png)
-
-2. Create a new file to use for testing with the command ```fallocate -l 1G testfile.xyz```, which will create a file of 1GB size named "testfile.xyz".
-
-![Create file](/images/5-Workshop/5.3-S3-vpc/cli-file.png)
-
-3. Upload file to S3 bucket with command ```aws s3 cp testfile.xyz s3://your-bucket-name```. Replace your-bucket-name with the name of S3 bucket that you created earlier.
-
-![Uploaded](/images/5-Workshop/5.3-S3-vpc/uploaded.png)
-
-You have successfully uploaded the file to your S3 bucket. You can now terminate the session.
-
-#### Check object in S3 bucket
-
-1. Navigate to S3 console.  
-2. Click the name of your s3 bucket
-3. In the Bucket console, you will see the file you have uploaded to your S3 bucket
-
-![Check S3](/images/5-Workshop/5.3-S3-vpc/check-s3-bucket.png)
-
-#### Section summary
-
-Congratulation on completing access to S3 from VPC. In this section, you created a Gateway endpoint for Amazon S3, and used the AWS CLI to upload an object. The upload worked because the Gateway endpoint allowed communication to S3, without needing an Internet Gateway attached to "VPC Cloud". This demonstrates the functionality of the Gateway endpoint as a secure path to S3 without traversing the Public Internet.
-
-
-
-
-
-
-
-
-
-
-
-
-
+## Suggested images to add
+- GitHub Actions workflow running successfully.
+![Overview](/images/5-Workshop/Workshop-img/action-1.jpg)
+- New image in ECR after push.
+![Overview](/images/5-Workshop/Workshop-img/action-2.jpg)
+![Overview](/images/5-Workshop/Workshop-img/action-3.jpg)

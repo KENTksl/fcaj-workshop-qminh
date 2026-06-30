@@ -1,20 +1,22 @@
 ---
-title : "Access S3 from on-premises"
-date : 2024-01-01
-weight : 4
+title : "Deploy runtime, data, and networking"
+date : 2024-01-01 
+weight : 4 
 chapter : false
 pre : " <b> 5.4. </b> "
 ---
 
-#### Overview
+## Objectives
 
-+ In this section, you will create an Interface endpoint to access Amazon S3 from a simulated on-premises environment. The Interface endpoint will allow you to route to Amazon S3 over a VPN connection from your simulated on-premises environment.
+This section focuses on the application runtime infrastructure layer, including VPC, ECS Fargate, ALB, API Gateway, VPC Link, data layer, and system observation components.
 
-+ Why using **Interface endpoint**: 
-    + Gateway endpoints only work with resources running in the VPC where they are created. Interface endpoints work with resources running in VPC, and also resources running in on-premises environments. Connectivty from your on-premises environment to the cloud can be provided by AWS Site-to-Site VPN or AWS Direct Connect.
-    + Interface endpoints allow you to connect to services powered by AWS PrivateLink. These services include some AWS services, services hosted by other AWS customers and partners in their own VPCs (referred to as PrivateLink Endpoint Services), and supported AWS Marketplace Partner services. For this workshop, we will focus on connecting to Amazon S3.
+## Content
 
-![Interface endpoint architecture](/images/5-Workshop/5.4-S3-onprem/diagram3.png)
+- [Set up VPC, IAM, and security layer](5.4.1-prepare/)
+- [Deploy ECS, ALB, API Gateway, and VPC Link](5.4.2-create-interface-enpoint/)
+- [Configure RDS Multi-AZ, Secrets Manager, and RDS Proxy](5.4.3-test-endpoint/)
+- [Set up CloudWatch, Backup, and system testing](5.4.4-dns-simulation/)
 
+## Expected results
 
-
+After this section, you have an infrastructure that can receive requests from the Internet, route internal traffic, securely connect data, and is ready for operational monitoring.

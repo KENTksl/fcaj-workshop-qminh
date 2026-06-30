@@ -41,6 +41,8 @@ Sau bước này, bạn đã sẵn sàng về mặt tài khoản, phân quyền 
 ## Gợi ý hình ảnh cần thêm
 
 - Hình repository GitHub của dự án.
-- Hình các IAM roles/policies chính.
-- Hình cây thư mục hoặc các file cấu hình trong repo.
-- Hình bảng quy ước đặt tên tài nguyên nếu bạn có chuẩn bị riêng.
+![Overview](/images/5-Workshop/5.2-Prerequisite/repo-github.jpg)
+
+
+- Hình các IAM user cho 5 thành viên của nhóm.
+![Overview](/images/5-Workshop/5.2-Prerequisite/iam-users.jpg)
