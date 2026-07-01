@@ -21,8 +21,8 @@ Phần này tập trung vào việc xây dựng luồng tự động hóa quy tr
 
 Chương này bao gồm 2 bài thực hành chi tiết theo trình tự:
 
-- [5.3.1. Chuẩn bị GitHub, IAM User Access Key, ECR và Thông báo](5.3.1-create-gwe/)
-- [5.3.2. Cấu hình Workflow và kiểm tra luồng CI/CD](5.3.2-test-gwe/)
+- [5.3.1. Chuẩn bị GitHub, IAM User Access Key, ECR và Thông báo](5.3.1-prepare/)
+- [5.3.2. Cấu hình Workflow và kiểm tra luồng CI/CD](5.3.2-configure-workflow/)
 
 ## Kết quả mong đợi
 

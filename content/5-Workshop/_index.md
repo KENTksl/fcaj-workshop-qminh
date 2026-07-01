@@ -27,7 +27,7 @@ In each section, I've created a content template based on your project so you ca
 
 1. [Workshop overview](5.1-Workshop-overview/)
 2. [Prerequisites](5.2-Prerequiste/)
-3. [Set up source, ECR, and CI/CD pipeline](5.3-S3-vpc/)
-4. [Deploy runtime, data, and networking](5.4-S3-onprem/)
+3. [Set up source, ECR, and CI/CD pipeline](5.3-Set-up-source-ECR-and-GitHub-Actions-CI-CD/)
+4. [Deploy runtime, data, and networking](5.4-Deploy-runtime-data-and-networking/)
 5. [Security, optimization, and extension checks](5.5-Policy/)
 6. [Resource cleanup](5.6-Cleanup/)

@@ -12,10 +12,10 @@ Phần này tập trung vào lớp hạ tầng chạy ứng dụng, bao gồm VP
 
 ## Nội dung
 
-- [Thiết lập VPC, IAM và lớp bảo mật](5.4.1-prepare/)
-- [Triển khai ECS, ALB, API Gateway và VPC Link](5.4.2-create-interface-enpoint/)
-- [Cấu hình RDS Multi-AZ, Secrets Manager và RDS Proxy](5.4.3-test-endpoint/)
-- [Thiết lập CloudWatch, Backup và kiểm thử hệ thống](5.4.4-dns-simulation/)
+- [Thiết lập VPC, IAM và lớp bảo mật](5.4.1-set-up-vpc/)
+- [Triển khai ECS, ALB, API Gateway và VPC Link](5.4.2-deploy-ecs/)
+- [Cấu hình RDS Multi-AZ, Secrets Manager và RDS Proxy](5.4.3-configure-rds/)
+- [Thiết lập CloudWatch, Backup và kiểm thử hệ thống](5.4.4-set-up-monitoring/)
 
 ## Kết quả mong đợi
 

@@ -12,10 +12,10 @@ This section focuses on the application runtime infrastructure layer, including 
 
 ## Content
 
-- [Set up VPC, IAM, and security layer](5.4.1-prepare/)
-- [Deploy ECS, ALB, API Gateway, and VPC Link](5.4.2-create-interface-enpoint/)
-- [Configure RDS Multi-AZ, Secrets Manager, and RDS Proxy](5.4.3-test-endpoint/)
-- [Set up CloudWatch, Backup, and system testing](5.4.4-dns-simulation/)
+- [Set up VPC, IAM, and security layer](5.4.1-set-up-vpc/)
+- [Deploy ECS, ALB, API Gateway, and VPC Link](5.4.2-deploy-ecs/)
+- [Configure RDS Multi-AZ, Secrets Manager, and RDS Proxy](5.4.3-configure-rds/)
+- [Set up CloudWatch, Backup, and system testing](5.4.4-set-up-monitoring/)
 
 ## Expected results
 

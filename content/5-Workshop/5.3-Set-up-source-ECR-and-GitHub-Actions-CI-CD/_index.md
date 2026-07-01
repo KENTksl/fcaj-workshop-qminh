@@ -20,8 +20,8 @@ This section focuses on building the automation flow from source code to contain
 
 ## Content
 
-- [Prepare GitHub, IAM, ECR, and Artifact Bucket](5.3.1-create-gwe/)
-- [Configure GitHub Actions and test CI/CD](5.3.2-test-gwe/)
+- [Prepare GitHub, IAM, ECR, and Artifact Bucket](5.3.1-prepare/)
+- [Configure GitHub Actions and test CI/CD](5.3.2-configure-workflow/)
 
 ## Expected results
 
