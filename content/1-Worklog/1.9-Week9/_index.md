@@ -1,52 +1,43 @@
 ---
-title: "Week 9 Worklog"
-date: 2026-05-27
+title: "Worklog Week 9"
+date: 2026-06-15
 weight: 9
 chapter: false
 pre: " <b> 1.9. </b> "
 ---
+
 ### Week 9 Objectives:
 
-* Connect and get acquainted with members of First Cloud Journey.
-* Understand basic AWS services, how to use the console & CLI.
+- Build the `GlobalMart` project with the frontend using `React` and the backend using `Java Spring Boot`.
+- Complete core e-commerce system functionalities including registration, login, product management, category management, and an admin dashboard.
+- Prepare the foundation for deploying `production CI/CD` for the project on AWS.
 
-### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
+### Tasks to be Deployed This Week:
 
+| Day | Tasks                                                                                                                                                                                                                                                                                                                                                                                                                           | Start Date | End Date   | Reference                                             |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------- |
+| 2   | - Initialize the `GlobalMart` project and organize the source code structure <br>&emsp; + Separate into 2 main parts: `globalmart-app` for frontend and `globalmart-api` for backend <br>&emsp; + Set up the development environment for `React/Vite` on the frontend and `Spring Boot` on the backend <br>&emsp; + Configure concurrent execution of frontend and backend from the root directory using `npm run dev`          | 15/06/2026 | 15/06/2026 | https://github.com/KENTksl/globalmart-production-cicd |
+| 3   | - Develop the frontend using `React` and `TypeScript` <br>&emsp; + Build the basic user interface for the e-commerce website <br>&emsp; + Design pages for login, registration, and product display <br>&emsp; + Connect the frontend to the backend API to prepare for business logic processing                                                                                                                               | 16/06/2026 | 16/06/2026 | https://github.com/KENTksl/globalmart-production-cicd |
+| 4   | - Develop the backend using `Java Spring Boot` <br>&emsp; + Build APIs for user login and registration <br>&emsp; + Build functionalities for product and category management <br>&emsp; + Connect the backend to `MongoDB Atlas` for application data storage                                                                                                                                                                  | 17/06/2026 | 17/06/2026 | https://github.com/KENTksl/globalmart-production-cicd |
+| 5   | - Complete the main functionalities of the system <br>&emsp; + Integrate data workflow between frontend and backend <br>&emsp; + Add features including `login`, `register`, `product`, and `category` <br>&emsp; + Build and update the `admin dashboard` for system administration                                                                                                                                            | 18/06/2026 | 18/06/2026 | https://github.com/KENTksl/globalmart-production-cicd |
+| 6   | - Prepare the `production CI/CD` foundation for the project <br>&emsp; + Add configuration files including `Dockerfile`, `buildspec.yml`, `appspec.yml`, and `taskdef.json` <br>&emsp; + Define integration directions for `AWS CodePipeline`, `CodeBuild`, `CodeDeploy`, `ECR/EC2`, `CloudWatch`, and `SNS` for the next deployment phase <br>&emsp; + Summarize project progress and review the overall source code structure | 19/06/2026 | 19/06/2026 | https://github.com/KENTksl/globalmart-production-cicd |
 
 ### Week 9 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
-
-* Successfully created and configured an AWS Free Tier account.
-
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
-
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
-
-* Used AWS CLI to perform basic operations such as:
-
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+- Successfully built the `GlobalMart` project following a clear decoupled frontend and backend architecture:
+  - Frontend utilizes `React`, `Vite`, and `TypeScript`.
+  - Backend utilizes `Java Spring Boot`.
+  - Source code is organized into 2 main directories: `globalmart-app` and `globalmart-api`.
+- Completed core e-commerce system functionalities:
+  - Account registration.
+  - System login.
+  - Product management.
+  - Category management.
+  - Added an `admin dashboard`.
+- Connected the backend to `MongoDB Atlas` to store and manage application data.
+- Configured an efficient workflow for running the project in the development environment:
+  - Run frontend and backend concurrently using `npm run dev`.
+  - Ability to run frontend or backend independently based on testing requirements.
+- Prepared the foundation for deploying `production CI/CD` for the project:
+  - Added necessary configuration files such as `Dockerfile`, `buildspec.yml`, `appspec.yml`, and `taskdef.json`.
+  - Outlined the integration direction with AWS services including `CodePipeline`, `CodeBuild`, `CodeDeploy`, `CloudWatch`, and `SNS`.

@@ -6,31 +6,30 @@ chapter: false
 pre: " <b> 1. </b> "
 ---
 
-**Trong trang này** bạn sẽ cần giới thiệu worklog của bạn **như thế nào**? Bạn hoàn thành chương trình trong vòng **bao nhiêu tuần**? Bạn **đã làm gì** trong các tuần đó?
+Trang này tóm tắt worklog trong 12 tuần thực tập, từ giai đoạn học nền tảng AWS đến giai đoạn phân tích, xây dựng và triển khai project `GlobalMart` trên AWS.
 
+Nội dung công việc theo từng tuần như sau:
 
-Thông thường và cũng là tiêu chuẩn, một worklog được thực hiện trong khoảng 3 tháng (trong suốt thời gian thực tập) với nội dung các tuần như sau:
+- **Tuần 1:** [Làm quen với AWS và các dịch vụ cơ bản trong AWS](1.1-week1/) - Tìm hiểu kiến thức nền tảng về cloud, các dịch vụ AWS cơ bản, IAM, Budgets và Well-Architected Framework.
 
-**Tuần 1:** [Làm quen với AWS và các dịch vụ cơ bản trong AWS](1.1-week1/)
+- **Tuần 2:** [Học về AWS Networking và thực hành các lab mạng](1.2-week2/) - Học VPC, subnet, route table, security group, NACL, hybrid networking, load balancer và thực hành Route 53, VPC Peering, Transit Gateway, Session Manager.
 
-**Tuần 2:** [Làm công việc A...](1.2-week2/)
+- **Tuần 3:** [Học về Compute và thực hành triển khai hạ tầng tính toán](1.3-week3/) - Tìm hiểu EC2, EBS, Auto Scaling, EFS, Lightsail, CloudWatch, MGN và thực hành các lab liên quan đến compute và giám sát.
 
-**Tuần 3:** [Làm công việc B...](1.3-week3/)
+- **Tuần 4:** [Học về Storage, Backup và Disaster Recovery](1.4-week4/) - Nghiên cứu Amazon S3, Snow Family, Storage Gateway, chiến lược backup/recovery và thực hành AWS Backup, VM Import/Export, File Storage Gateway.
 
-**Tuần 4:** [Làm công việc C...](1.4-week4/)
+- **Tuần 5:** [Học về Security, IAM và các dịch vụ quản lý định danh](1.5-week5/) - Học Shared Responsibility Model, IAM, Cognito, Organizations, Identity Center, KMS, Security Hub và làm các lab về phân quyền, tagging, Identity Center, KMS.
 
-**Tuần 5:** [Làm công việc D...](1.5-week5/)
+- **Tuần 6:** [Học về Database và các dịch vụ dữ liệu trên AWS](1.6-week6/) - Ôn tập kiến thức database, học Amazon RDS, Aurora, Redshift, ElastiCache, DMS, SCT và thực hành triển khai RDS.
 
-**Tuần 6:** [Làm công việc E...](1.6-week6/)
+- **Tuần 7:** [Học về Data Lake, Analytics và trực quan hóa dữ liệu](1.7-week7/) - Tìm hiểu DynamoDB, AWS Glue, Athena, QuickSight, pipeline dữ liệu serverless và thực hành các lab phân tích dữ liệu.
 
-**Tuần 7:** [Làm công việc G...](1.7-week7/)
+- **Tuần 8:** [Phân tích yêu cầu và thiết kế kiến trúc project cuối kỳ](1.8-week8/) - Xác định kiến trúc tổng thể cho `GlobalMart`, bao gồm CI/CD, containerization, ECS Fargate, RDS, backup/recovery và monitoring.
 
-**Tuần 8:** [Làm công việc H...](1.8-week8/)
+- **Tuần 9:** [Khởi tạo và phát triển ứng dụng GlobalMart](1.9-week9/) - Khởi tạo source code frontend/backend, xây dựng giao diện React, API Spring Boot, kết nối dữ liệu và chuẩn bị nền tảng CI/CD production.
 
-**Tuần 9:** [Làm công việc I...](1.9-week9/)
+- **Tuần 10:** [Triển khai hạ tầng GlobalMart trên AWS](1.10-week10/) - Tạo VPC, subnet, security group, RDS, ECR, ALB, target group, ECS cluster, task definition và ECS services cho frontend/backend.
 
-**Tuần 10:** [Làm công việc L...](1.10-week10/)
+- **Tuần 11:** [Hoàn thiện kết nối, CI/CD, backup và monitoring](1.11-week11/) - Triển khai API Gateway + VPC Link, cập nhật frontend gọi backend private, cấu hình GitHub Actions CI/CD, backup RDS ra S3 và thiết lập CloudWatch, SNS.
 
-**Tuần 11:** [Làm công việc M...](1.11-week11/)
-
-**Tuần 12:** [Làm công việc N...](1.12-week12/)
+- **Tuần 12:** [Hoàn thiện báo cáo thực tập](1.12-week12/) - Tổng hợp kết quả, rà soát nội dung và hoàn thiện báo cáo thực tập trước khi kết thúc chương trình.
