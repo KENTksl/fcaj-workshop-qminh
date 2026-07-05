@@ -24,20 +24,20 @@ pre: " <b> 1.9. </b> "
 
 ### Week 9 Achievements:
 
-- Successfully built the `GlobalMart` project following a clear decoupled frontend and backend architecture:
-  - Frontend utilizes `React`, `Vite`, and `TypeScript`.
-  - Backend utilizes `Java Spring Boot`.
-  - Source code is organized into 2 main directories: `globalmart-app` and `globalmart-api`.
-- Completed core e-commerce system functionalities:
+- Built the `GlobalMart` project with a clear separation between frontend and backend:
+  - Frontend uses `React`, `Vite`, and `TypeScript`.
+  - Backend uses `Java Spring Boot`.
+  - The source code is organized into 2 main directories: `globalmart-app` and `globalmart-api`.
+- Completed the core functionalities of the e-commerce system:
   - Account registration.
   - System login.
   - Product management.
   - Category management.
   - Added an `admin dashboard`.
 - Connected the backend to `MongoDB Atlas` to store and manage application data.
-- Configured an efficient workflow for running the project in the development environment:
+- Established a convenient way to run the project in the development environment:
   - Run frontend and backend concurrently using `npm run dev`.
-  - Ability to run frontend or backend independently based on testing requirements.
+  - Run frontend or backend separately depending on testing needs.
 - Prepared the foundation for deploying `production CI/CD` for the project:
-  - Added necessary configuration files such as `Dockerfile`, `buildspec.yml`, `appspec.yml`, and `taskdef.json`.
-  - Outlined the integration direction with AWS services including `CodePipeline`, `CodeBuild`, `CodeDeploy`, `CloudWatch`, and `SNS`.
+  - Added configuration files such as `Dockerfile`, `buildspec.yml`, `appspec.yml`, and `taskdef.json`.
+  - Defined the integration direction with AWS services such as `CodePipeline`, `CodeBuild`, `CodeDeploy`, `CloudWatch`, and `SNS`.
