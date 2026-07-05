@@ -1,52 +1,53 @@
 ---
 title: "Week 11 Worklog"
-date: 2026-05-25
+date: 2026-06-29
 weight: 11
 chapter: false
 pre: " <b> 1.11. </b> "
 ---
 
-### Week 11 Objectives:
+### Week 11 Objective:
 
-- Connect and get acquainted with members of First Cloud Journey.
-- Understand basic AWS services, how to use the console & CLI.
+- Solve the connectivity problem between `Frontend (React SPA)` and the `Backend` hosted in a private subnet using `API Gateway` and `VPC Link`.
+- Set up a `CI/CD pipeline` to automatically build and deploy the application to ECS using `GitHub Actions`.
+- Implement `Monitoring & Observability` with `CloudWatch`, `SNS`, and automated alerts via email/SMS.
+- Set up `Recovery & Backup` using `RDS Snapshot` and export snapshots to `S3`.
 
-### Tasks to be carried out this week:
+### Weekly Schedule:
 
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP <br>                              | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| Day | Tasks                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Start Date | Completion Date | References                                            |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------- | ----------------------------------------------------- |
+| 2   | - Analyze the connectivity challenge: `React SPA` (running in browser) to Backend in a private subnet <br> - Choose `API Gateway + VPC Link` instead of exposing Backend publicly <br> - Create `VPC Link` (`vpclink-globalmart`) connected to the `ALB internal` <br> - Create `HTTP API Gateway` (`globalmart-api-gateway`) with Private resource integration                                                                                                | 29/06/2026 | 29/06/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 3   | - Configure API Gateway `Route`: `ANY /{proxy+}` → Private integration <br> - Deploy API Gateway to a stage (`$default` or `prod`) <br> - Connectivity test: `curl <invoke-url>/actuator/health` returns `{\"status\":\"UP\"}` <br> - Update `REACT_APP_API_URL` in Frontend to point to the correct Invoke URL <br> - Rebuild Frontend image, push to ECR, and redeploy ECS Frontend Service                                                                  | 30/06/2026 | 30/06/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 4   | - Set up `CI/CD pipeline` using `GitHub Actions` (replace CodePipeline due to CodeBuild quota limits) <br>&emsp; + Create `IAM Role` with OIDC for GitHub Actions to authenticate to AWS <br>&emsp; + Configure `GitHub Secrets`: `AWS_ROLE_ARN`, `AWS_REGION`, `ECR_REPOSITORY`, `ECS_SERVICE`, `ECS_CLUSTER`, `CONTAINER_NAME` <br>&emsp; + Write workflow `.github/workflows/deploy-backend.yml`: build image → push ECR → update ECS Service               | 01/07/2026 | 01/07/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 5   | - Create `S3 Buckets`: <br>&emsp; + `globalmart-artifact-bucket` (Versioning enabled) to store build artifacts <br>&emsp; + `globalmart-backup-bucket` to store RDS snapshot exports <br> - Configure `Bucket Policy` to allow the RDS export service to write to the backup bucket <br> - Create an `IAM Role` for the RDS export task <br> - Export an `RDS Snapshot` to S3 to demonstrate the Recovery & Backup flow                                        | 02/07/2026 | 02/07/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 6   | - Implement `Monitoring & Observability`: <br>&emsp; + Verify `CloudWatch Logs` receives logs from ECS Frontend and Backend <br>&emsp; + Create `CloudWatch Alarms`: CPU > 80%, ALB 5XX errors > 5 within 5 minutes <br>&emsp; + Create `SNS Topic` (`globalmart-alerts`) and subscribe Email/SMS <br>&emsp; + Attach Alarm Actions → SNS Topic and test alert emails <br> - Finalize and update the overall architecture diagram to match the deployed system | 03/07/2026 | 03/07/2026      | https://github.com/KENTksl/globalmart-production-cicd |
 
-### Week 11 Achievements:
+### Results:
 
-- Understood what AWS is and mastered the basic service groups:
-  - Compute
-  - Storage
-  - Networking
-  - Database
-  - ...
+- Successfully solved connectivity between `React SPA` and a Backend in a private subnet:
+  - Understood the difference between `ECS Managed Blue/Green` and `CodeDeploy Blue/Green`.
+  - Implemented `API Gateway (HTTP API)` + `VPC Link` as a bridge from the Internet into the VPC via `ALB internal` without exposing the Backend publicly.
+  - Verified the request flow: Browser → API Gateway → VPC Link → ALB internal → ECS Backend → RDS MySQL.
 
-- Successfully created and configured an AWS Free Tier account.
+- Successfully set up a `CI/CD pipeline` using `GitHub Actions`:
+  - Workflow triggers automatically on pushes to the `main` branch.
+  - Steps: Checkout → Configure AWS credentials (OIDC) → Login to ECR → Build & Push image → Render Task Definition → Deploy ECS Service.
+  - ECS Service performs `Blue/Green deployment` (ECS Managed) after receiving updates from GitHub Actions.
 
-- Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
+- Successfully implemented `Recovery & Backup`:
+  - Enabled `RDS Automated Backup` (7-day retention).
+  - Exported RDS snapshots to the `S3 Backup Bucket`.
+  - Understood the flow: RDS Snapshot → Export → S3 (Snapshots/Exports).
 
-- Installed and configured AWS CLI on the computer, including:
-  - Access Key
-  - Secret Key
-  - Default Region
-  - ...
+- Successfully implemented `Monitoring & Observability`:
+  - `CloudWatch Logs` collects realtime logs from both ECS services.
+  - `CloudWatch Alarms` trigger when CPU exceeds threshold or ALB returns 5XX errors.
+  - `SNS` sends alerts automatically via Email/SMS.
 
-- Used AWS CLI to perform basic operations such as:
-  - Check account & configuration information
-  - Retrieve the list of regions
-  - View EC2 service
-  - Create and manage key pairs
-  - Check information about running services
-  - ...
-
-- Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-- ...
+- Completed the overall `GlobalMart` AWS architecture with 5 major blocks:
+  - **Networking**: VPC, Subnet, IGW, NAT Gateway, Security Group.
+  - **Deployment (Runtime)**: ECS Fargate, ALB, API Gateway, VPC Link, RDS.
+  - **CI/CD**: GitHub Actions, ECR, S3 Artifact Bucket.
+  - **Recovery & Backup**: RDS Snapshot, S3 Backup Bucket.
+  - **Monitoring & Observability**: CloudWatch Logs, CloudWatch Metrics, CloudWatch Alarms, SNS, Email/SMS.

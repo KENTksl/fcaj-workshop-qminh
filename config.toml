@@ -1,5 +1,5 @@
-baseURL = "/"
-relativeURLs = true
+baseURL = 'https://KENTksl.github.io/fcaj-workshop-qminh/'
+relativeURLs = false
 canonifyURLs = false
 defaultContentLanguage = "en"
 

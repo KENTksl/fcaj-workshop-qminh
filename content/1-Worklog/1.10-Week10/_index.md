@@ -1,52 +1,48 @@
 ---
 title: "Week 10 Worklog"
-date: 2026-05-26
+date: 2026-06-22
 weight: 10
 chapter: false
 pre: " <b> 1.10. </b> "
 ---
 
-### Week 10 Objectives:
+### Week 10 Objective:
 
-- Connect and get acquainted with members of First Cloud Journey.
-- Understand basic AWS services, how to use the console & CLI.
+- Design and deploy networking infrastructure (VPC, Subnet, Security Group, NAT Gateway, IGW) for the `GlobalMart` project on AWS.
+- Deploy `RDS for MySQL` (Single-AZ) in a private subnet.
+- Package `Frontend` and `Backend` into Docker images and push them to `Amazon ECR`.
+- Set up `Application Load Balancer` (internet-facing and internal) and deploy an `ECS Cluster` with `Fargate` for both services.
 
-### Tasks to be carried out this week:
+### Weekly Schedule:
 
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP <br>                              | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
+| Day | Tasks                                                                                                                                                                                                                                                                                                                                                                                                                                        | Start Date  | Completion Date | References                                           |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | --------------- | ---------------------------------------------------- |
+| 2   | - Design the overall `GlobalMart` architecture on AWS <br> - Create `VPC` (`globalmart-vpc`, CIDR `10.0.0.0/16`) <br>&emsp; + Create `Public subnet`, `Private subnet A` (ECS), `Private subnet B` (RDS) <br>&emsp; + Create `Internet Gateway (IGW)` and `NAT Gateway` <br>&emsp; + Configure `Route Table` for each subnet                                                                                                                         | 22/06/2026  | 22/06/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 3   | - Create `Security Group` rules for each layer: <br>&emsp; + `sg-alb-public` for internet-facing ALB <br>&emsp; + `sg-ecs-frontend` for ECS Frontend task <br>&emsp; + `sg-ecs-backend` for ECS Backend task <br>&emsp; + `sg-alb-internal` for internal ALB <br>&emsp; + `sg-rds` for RDS MySQL <br> - Create `RDS for MySQL` (Single-AZ, `db.t3.micro`) in `Private subnet B`                                                     | 23/06/2026  | 23/06/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 4   | - Create `ECR Repository` for `globalmart-frontend` and `globalmart-backend` <br> - Build Docker images for Frontend (`React/Vite`) and Backend (`Spring Boot`) <br> - Push images to `Amazon ECR` <br> - Create database `globalmart` inside the RDS instance via a temporary EC2 host                                                                                                                                                   | 24/06/2026  | 24/06/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 5   | - Create internet-facing `Application Load Balancer` (Public subnet) <br>&emsp; + Create `Target Group tg-frontend` (type IP, port 80) <br>&emsp; + Configure Listener HTTP:80 → forward to `tg-frontend` <br> - Create internal `Application Load Balancer` (Private subnet A) <br>&emsp; + Create `Target Group tg-backend` (type IP, port 8080) <br>&emsp; + Configure Health check path `/actuator/health`                                    | 25/06/2026  | 25/06/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 6   | - Create `ECS Cluster` (`globalmart-cluster`, Fargate) <br> - Create `Task Definition` for Frontend and Backend <br>&emsp; + Configure CPU, Memory, Container port, Environment variables, CloudWatch Logs <br> - Create `ECS Service Frontend` attached to internet-facing ALB → `tg-frontend` <br> - Create `ECS Service Backend` attached to internal ALB → `tg-backend` <br> - Fix issues: Service-Linked Role, Health check grace period, Security Group | 26/06/2026  | 26/06/2026      | https://github.com/KENTksl/globalmart-production-cicd |
 
-### Week 10 Achievements:
+### Results:
 
-- Understood what AWS is and mastered the basic service groups:
-  - Compute
-  - Storage
-  - Networking
-  - Database
-  - ...
+- Successfully designed and deployed AWS networking infrastructure:
+  - `VPC globalmart-vpc` with CIDR `10.0.0.0/16`.
+  - Proper 3-tier subnet design: Public subnet (ALB, NAT), Private subnet A (ECS), Private subnet B (RDS).
+  - `Internet Gateway` and `NAT Gateway` configured with correct route tables for each subnet.
 
-- Successfully created and configured an AWS Free Tier account.
+- Successfully deployed `RDS for MySQL` (Single-AZ) in a private subnet:
+  - No public access; only allow traffic from `sg-ecs-backend` on port 3306.
+  - Created database `globalmart` and verified backend connectivity.
 
-- Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
+- Successfully built and pushed Docker images to `Amazon ECR`:
+  - `globalmart-frontend` image for the React/Vite app.
+  - `globalmart-backend` image for the Spring Boot API.
 
-- Installed and configured AWS CLI on the computer, including:
-  - Access Key
-  - Secret Key
-  - Default Region
-  - ...
+- Successfully deployed `ECS Cluster` with `Fargate`:
+  - `ECS Service Frontend` runs stably and receives traffic via the internet-facing ALB.
+  - `ECS Service Backend` connects to RDS and serves APIs behind the internal ALB.
+  - Correct Health check (`/actuator/health`) and Health check grace period (`120 seconds`) to avoid restart loops.
 
-- Used AWS CLI to perform basic operations such as:
-  - Check account & configuration information
-  - Retrieve the list of regions
-  - View EC2 service
-  - Create and manage key pairs
-  - Check information about running services
-  - ...
-
-- Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-- ...
+- Understood the traffic isolation model with Security Groups:
+  - ALB public → ECS Frontend → ALB internal → ECS Backend → RDS.
+  - Each layer only allows the required traffic sources, without unnecessary exposure.
