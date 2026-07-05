@@ -28,7 +28,7 @@ In each section, I've created a content template based on your project so you ca
 
 1. [Workshop overview](5.1-Workshop-overview/)
 2. [Set up AWS services](5.2-Prerequiste/)
-3. [Set up source, ECR, and CI/CD pipeline](5.3-Set-up-source-ECR-and-GitHub-Actions-CI-CD/)
-4. [Deploy runtime, data, and networking](5.4-Deploy-runtime-data-and-networking/)
-5. [Security, optimization, and extension checks](5.5-Policy/)
-6. [Resource cleanup](5.6-Cleanup/)
+3. [Set up source code, IAM OIDC, and GitHub Actions CI/CD](5.3-Build-Deploy/)
+4. [Security, optimization, and extension checks](5.4-Policy/)
+5. [Resource cleanup](5.5-Cleanup/)
+6. [Actual results](5.6-Results/)

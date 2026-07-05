@@ -21,6 +21,8 @@ Section `5.2` is organized by the major AWS service groups in the system:
 5. **Target Group** for load balancer to service routing.
 6. **API Gateway** for public APIs and VPC Link connectivity.
 7. **ECS** for task definitions, cluster, and service setup.
+8. **CloudWatch & SNS** for monitoring and alerting.
+9. **S3 & Snapshot** for backup and recovery.
 
 ## Child pages
 
@@ -31,6 +33,8 @@ Section `5.2` is organized by the major AWS service groups in the system:
 5. [5.2.5 - Set up Target Group](5.2.5-set-up-target-group/)
 6. [5.2.6 - Set up API Gateway](5.2.6-set-up-api-gateway/)
 7. [5.2.7 - Set up ECS](5.2.7-set-up-ecs/)
+8. [5.2.8 - Set up CloudWatch & SNS](5.2.8-set-up-cloudwatch-sns/)
+9. [5.2.9 - Set up S3 & Snapshot](5.2.9-set-up-s3-snapshot/)
 
 ## Expected results
 

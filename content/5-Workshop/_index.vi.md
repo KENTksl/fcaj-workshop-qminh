@@ -28,7 +28,7 @@ Trong mỗi mục, tôi đã tạo sẵn khuôn nội dung theo dự án của b
 
 1. [Tổng quan về workshop](5.1-Workshop-overview/)
 2. [Thiết lập dịch vụ AWS](5.2-Prerequiste/)
-3. [Thiết lập source, ECR và pipeline CI/CD](5.3-Set-up-source-ECR-and-GitHub-Actions-CI-CD/)
-4. [Triển khai runtime, data và networking](5.4-Deploy-runtime-data-and-networking/)
-5. [Bảo mật, tối ưu và kiểm tra mở rộng](5.5-Policy/)
-6. [Dọn dẹp tài nguyên](5.6-Cleanup/)
+3. [Thiết lập source, IAM OIDC và GitHub Actions CI/CD](5.3-Build-Deploy/)
+4. [Bảo mật, tối ưu và kiểm tra mở rộng](5.4-Policy/)
+5. [Dọn dẹp tài nguyên](5.5-Cleanup/)
+6. [Kết quả thực tế](5.6-Results/)

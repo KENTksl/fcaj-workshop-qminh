@@ -21,6 +21,8 @@ Mục `5.2` được tổ chức theo từng nhóm dịch vụ AWS quan trọng 
 5. **Target Group** cho liên kết giữa load balancer và services.
 6. **API Gateway** cho public API và kết nối VPC Link.
 7. **ECS** cho task definitions, cluster và service.
+8. **CloudWatch & SNS** cho giám sát và cảnh báo.
+9. **S3 & Snapshot** cho backup và recovery.
 
 ## Các trang con
 
@@ -31,6 +33,8 @@ Mục `5.2` được tổ chức theo từng nhóm dịch vụ AWS quan trọng 
 5. [5.2.5 - Thiết lập Target Group](5.2.5-set-up-target-group/)
 6. [5.2.6 - Thiết lập API Gateway](5.2.6-set-up-api-gateway/)
 7. [5.2.7 - Thiết lập ECS](5.2.7-set-up-ecs/)
+8. [5.2.8 - Thiết lập CloudWatch & SNS](5.2.8-set-up-cloudwatch-sns/)
+9. [5.2.9 - Thiết lập S3 & Snapshot](5.2.9-set-up-s3-snapshot/)
 
 ## Kết quả mong đợi
 
