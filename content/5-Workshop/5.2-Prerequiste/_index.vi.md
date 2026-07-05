@@ -1,48 +1,37 @@
 ---
-title : "Điều kiện tiên quyết"
-date : 2024-01-01 
-weight : 2
-chapter : false
-pre : " <b> 5.2. </b> "
+title: "Thiết lập dịch vụ AWS"
+date: 2024-01-01
+weight: 2
+chapter: false
+pre: " <b> 5.2. </b> "
 ---
 
 ## Mục tiêu
 
-Trước khi bắt đầu workshop, cần chuẩn bị đầy đủ tài khoản, phân quyền, mã nguồn và các tệp cấu hình để các bước triển khai phía sau có thể thực hiện thống nhất.
+Tạo bộ khung triển khai cho các dịch vụ AWS chính trong kiến trúc GlobalMart để bạn có thể tiếp tục điền chi tiết từng bước thực hành ở các mục con.
 
-## Những thành phần cần có
+## Nội dung chính
 
-- **Tài khoản AWS** có quyền tạo VPC, ECS, ECR, RDS, S3, CloudWatch, SNS, IAM, API Gateway và các dịch vụ liên quan.
-- **Repository GitHub** chứa source code frontend, backend, Dockerfile và các file cấu hình như `.github/workflows/*.yml`, `taskdef.json` hoặc các file environment phục vụ deploy.
-- **Ứng dụng đã sẵn sàng đóng gói** để có thể build thành Docker image.
-- **Thông số triển khai** như region, naming convention, port của frontend/backend, biến môi trường, thông tin database.
-- **Sơ đồ kiến trúc** hoặc tài liệu thiết kế để đối chiếu trong suốt quá trình triển khai.
+Mục `5.2` được tổ chức theo từng nhóm dịch vụ AWS quan trọng trong hệ thống:
 
-## Gợi ý phân quyền IAM
+1. **VPC** cho lớp mạng và nhóm bảo mật.
+2. **RDS** cho subnet group và database.
+3. **ECR** cho kho chứa Docker image.
+4. **Load Balancers** cho điều phối lưu lượng truy cập.
+5. **Target Group** cho liên kết giữa load balancer và services.
+6. **API Gateway** cho public API và kết nối VPC Link.
+7. **ECS** cho task definitions, cluster và service.
 
-Bạn có thể chuẩn bị các nhóm quyền hoặc IAM roles sau:
+## Các trang con
 
-- Role cho GitHub Actions hoặc quy trình push image lên ECR.
-- Role cho GitHub Actions để build Docker image, đăng nhập ECR và cập nhật ECS service/task definition.
-- Execution role và task role cho ECS services.
-- Quyền cho CloudWatch, SNS, RDS monitoring và backup nếu bạn dùng các thành phần đó.
-
-## Đầu vào nên chuẩn bị trước
-
-- Source code frontend và backend.
-- Tên tài nguyên theo quy ước thống nhất, ví dụ `globalmart-<service>-<env>`.
-- Bộ file workflow cho GitHub Actions và cấu hình ECS.
-- Danh sách secret hoặc biến môi trường cần đưa vào runtime.
+1. [5.2.1 - Thiết lập VPC](5.2.1-create-vpc/)
+2. [5.2.2 - Thiết lập RDS](5.2.2-set-up-rds/)
+3. [5.2.3 - Thiết lập ECR](5.2.3-set-up-ecr/)
+4. [5.2.4 - Thiết lập Load Balancers](5.2.4-set-up-load-balancers/)
+5. [5.2.5 - Thiết lập Target Group](5.2.5-set-up-target-group/)
+6. [5.2.6 - Thiết lập API Gateway](5.2.6-set-up-api-gateway/)
+7. [5.2.7 - Thiết lập ECS](5.2.7-set-up-ecs/)
 
 ## Kết quả mong đợi
 
-Sau bước này, bạn đã sẵn sàng về mặt tài khoản, phân quyền và đầu vào triển khai để bắt đầu dựng hạ tầng.
-
-## Gợi ý hình ảnh cần thêm
-
-- Hình repository GitHub của dự án.
-![Overview](/images/5-Workshop/5.2-Prerequisite/repo-github.jpg)
-
-
-- Hình các IAM user cho 5 thành viên của nhóm.
-![Overview](/images/5-Workshop/5.2-Prerequisite/iam-users.jpg)
+Sau mục này, bạn có sẵn khung nội dung theo dịch vụ để tiếp tục hoàn thiện toàn bộ workshop triển khai GlobalMart trên AWS.

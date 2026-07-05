@@ -5,6 +5,7 @@ weight: 5
 chapter: false
 pre: " <b> 5. </b> "
 ---
+
 # Workshop to deploy GlobalMart infrastructure on AWS
 
 #### Overview
@@ -26,7 +27,7 @@ In each section, I've created a content template based on your project so you ca
 #### Content
 
 1. [Workshop overview](5.1-Workshop-overview/)
-2. [Prerequisites](5.2-Prerequiste/)
+2. [Set up AWS services](5.2-Prerequiste/)
 3. [Set up source, ECR, and CI/CD pipeline](5.3-Set-up-source-ECR-and-GitHub-Actions-CI-CD/)
 4. [Deploy runtime, data, and networking](5.4-Deploy-runtime-data-and-networking/)
 5. [Security, optimization, and extension checks](5.5-Policy/)

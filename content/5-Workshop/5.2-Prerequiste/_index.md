@@ -1,46 +1,37 @@
 ---
-title : "Prerequisites"
-date : 2024-01-01 
-weight : 2
-chapter : false
-pre : " <b> 5.2. </b> "
+title: "Set up AWS services"
+date: 2024-01-01
+weight: 2
+chapter: false
+pre: " <b> 5.2. </b> "
 ---
 
 ## Objectives
 
-Before starting the workshop, you need to fully prepare accounts, permissions, source code, and configuration files so that subsequent deployment steps can be executed consistently.
+Create the content structure for the main AWS services in the GlobalMart architecture so you can continue filling in the detailed lab steps in each child section.
 
-## Required components
+## Main content
 
-- **AWS account** with permissions to create VPC, ECS, ECR, RDS, S3, CloudWatch, SNS, IAM, API Gateway, and related services.
-- **GitHub repository** containing frontend source code, backend, Dockerfile, and configuration files such as `.github/workflows/*.yml`, `taskdef.json`, or environment files for deployment.
-- **Application ready for packaging** to be built into Docker images.
-- **Deployment parameters** such as region, naming convention, frontend/backend ports, environment variables, database information.
-- **Architecture diagram** or design documentation for reference throughout the deployment process.
+Section `5.2` is organized by the major AWS service groups in the system:
 
-## IAM permissions suggestions
+1. **VPC** for networking and security groups.
+2. **RDS** for subnet groups and databases.
+3. **ECR** for Docker image repositories.
+4. **Load Balancers** for traffic distribution.
+5. **Target Group** for load balancer to service routing.
+6. **API Gateway** for public APIs and VPC Link connectivity.
+7. **ECS** for task definitions, cluster, and service setup.
 
-You can prepare the following permission groups or IAM roles:
+## Child pages
 
-- Role for GitHub Actions or process to push images to ECR.
-- Role for GitHub Actions to build Docker images, log in to ECR, and update ECS service/task definition.
-- Execution role and task role for ECS services.
-- Permissions for CloudWatch, SNS, RDS monitoring and backup if you use those components.
-
-## Inputs to prepare in advance
-
-- Frontend and backend source code.
-- Resource names according to unified convention, e.g., `globalmart-<service>-<env>`.
-- Workflow files for GitHub Actions and ECS configuration.
-- List of secrets or environment variables to include in runtime.
+1. [5.2.1 - Set up VPC](5.2.1-create-vpc/)
+2. [5.2.2 - Set up RDS](5.2.2-set-up-rds/)
+3. [5.2.3 - Set up ECR](5.2.3-set-up-ecr/)
+4. [5.2.4 - Set up Load Balancers](5.2.4-set-up-load-balancers/)
+5. [5.2.5 - Set up Target Group](5.2.5-set-up-target-group/)
+6. [5.2.6 - Set up API Gateway](5.2.6-set-up-api-gateway/)
+7. [5.2.7 - Set up ECS](5.2.7-set-up-ecs/)
 
 ## Expected results
 
-After this step, you are ready in terms of accounts, permissions, and deployment inputs to start building the infrastructure.
-
-## Suggested images to add
-- Hình repository GitHub của dự án.
-![Overview](/images/5-Workshop/5.2-Prerequisite/repo-github.jpg)
-
-- Hình các IAM user cho 5 thành viên của nhóm.
-![Overview](/images/5-Workshop/5.2-Prerequisite/iam-users.jpg)
+After this section, you have a ready-made service-based outline to continue completing the full GlobalMart deployment workshop on AWS.

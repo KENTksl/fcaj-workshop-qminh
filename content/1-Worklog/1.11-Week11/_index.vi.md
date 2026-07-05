@@ -1,54 +1,61 @@
 ---
 title: "Worklog Tuần 11"
-date: 2026-05-25
+date: 2026-06-29
 weight: 11
 chapter: false
 pre: " <b> 1.11. </b> "
 ---
+
 ### Mục tiêu tuần 11:
 
-* Kết nối, làm quen với các thành viên trong First Cloud Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+- Giải quyết bài toán kết nối `Frontend (React SPA)` với `Backend` ẩn trong private subnet
+  thông qua `API Gateway` và `VPC Link`.
+- Thiết lập `CI/CD pipeline` tự động hóa việc build và deploy ứng dụng lên ECS
+  bằng `GitHub Actions`.
+- Triển khai `Monitoring & Observability` với `CloudWatch`, `SNS` và cấu hình cảnh báo
+  tự động qua email/SMS.
+- Thiết lập `Recovery & Backup` với `RDS Snapshot` và export ra `S3`.
 
 ### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
+| Thứ | Công việc                                                                                                                                                                                                                                                                                                                                                                                                                                            | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                                        |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------------------- |
+| 2   | - Phân tích bài toán kết nối `React SPA` (chạy trên browser) với Backend ẩn trong private subnet <br> - Chọn giải pháp `API Gateway + VPC Link` thay cho expose trực tiếp <br> - Tạo `VPC Link` (`vpclink-globalmart`) kết nối vào `ALB internal` <br> - Tạo `HTTP API Gateway` (`globalmart-api-gateway`) với Private resource integration                                                                                                          | 29/06/2026   | 29/06/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 3   | - Cấu hình `Route` trong API Gateway: `ANY /{proxy+}` → Private integration <br> - Deploy API Gateway ra stage (`$default` hoặc `prod`) <br> - Test kết nối: `curl <invoke-url>/actuator/health` trả về `{"status":"UP"}` <br> - Cập nhật `REACT_APP_API_URL` trong Frontend trỏ đúng Invoke URL <br> - Build lại Frontend image, push ECR, deploy lại ECS Service Frontend                                                                          | 30/06/2026   | 30/06/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 4   | - Thiết lập `CI/CD pipeline` bằng `GitHub Actions` (thay thế CodePipeline do giới hạn quota CodeBuild) <br>&emsp; + Tạo `IAM Role` với OIDC cho GitHub Actions xác thực vào AWS <br>&emsp; + Cấu hình `GitHub Secrets`: `AWS_ROLE_ARN`, `AWS_REGION`, `ECR_REPOSITORY`, `ECS_SERVICE`, `ECS_CLUSTER`, `CONTAINER_NAME` <br>&emsp; + Viết workflow `.github/workflows/deploy-backend.yml` tự động: build image → push ECR → update ECS Service        | 01/07/2026   | 01/07/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 5   | - Triển khai `S3 Buckets`: <br>&emsp; + `globalmart-artifact-bucket` (Versioning enabled) lưu build artifact <br>&emsp; + `globalmart-backup-bucket` lưu RDS snapshot export <br> - Cấu hình `Bucket Policy` cho phép RDS export service ghi vào Backup Bucket <br> - Tạo `IAM Role` cho RDS export task <br> - Thực hiện export `RDS Snapshot` ra S3 để minh họa luồng Recovery & Backup                                                            | 02/07/2026   | 02/07/2026      | https://github.com/KENTksl/globalmart-production-cicd |
+| 6   | - Triển khai `Monitoring & Observability`: <br>&emsp; + Xác nhận `CloudWatch Logs` nhận log từ ECS Frontend và Backend <br>&emsp; + Tạo `CloudWatch Alarms`: CPU > 80%, ALB 5XX errors > 5 trong 5 phút <br>&emsp; + Tạo `SNS Topic` (`globalmart-alerts`) và subscription Email/SMS <br>&emsp; + Gắn Alarm Action → SNS Topic → test nhận email cảnh báo <br> - Hoàn thiện và cập nhật sơ đồ kiến trúc tổng thể phản ánh đúng thực tế đã triển khai | 03/07/2026   | 03/07/2026      | https://github.com/KENTksl/globalmart-production-cicd |
 
 ### Kết quả đạt được tuần 11:
 
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+- Giải quyết thành công bài toán kết nối `React SPA` với Backend trong private subnet:
+  - Hiểu rõ sự khác biệt giữa `ECS Managed Blue/Green` và `CodeDeploy Blue/Green`.
+  - Triển khai `API Gateway (HTTP API)` + `VPC Link` làm cầu nối từ Internet vào
+    `ALB internal` trong VPC mà không cần expose Backend ra public.
+  - Xác nhận luồng hoạt động: Browser → API Gateway → VPC Link → ALB internal
+    → ECS Backend → RDS MySQL.
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
+- Thiết lập thành công `CI/CD pipeline` bằng `GitHub Actions`:
+  - Workflow tự động chạy khi push code lên branch `main`.
+  - Các bước: Checkout → Configure AWS credentials (OIDC) → Login ECR →
+    Build & Push image → Render Task Definition → Deploy ECS Service.
+  - ECS Service tự động thực hiện `Blue/Green deployment` (ECS Managed)
+    sau khi nhận lệnh update từ GitHub Actions.
 
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
+- Triển khai thành công `Recovery & Backup`:
+  - `RDS Automated Backup` (retention 7 ngày) tự động chạy hàng ngày.
+  - Export RDS Snapshot ra `S3 Backup Bucket` thành công.
+  - Hiểu được luồng: RDS Snapshot → Export → S3 (Snapshots/Exports).
 
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
+- Triển khai thành công `Monitoring & Observability`:
+  - `CloudWatch Logs` thu thập log realtime từ cả 2 ECS Service.
+  - `CloudWatch Alarms` cảnh báo khi CPU vượt ngưỡng hoặc có lỗi 5XX từ ALB.
+  - `SNS` gửi email/SMS tự động khi Alarm triggered.
 
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
-
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
-
-
+- Hoàn thiện kiến trúc tổng thể `GlobalMart` trên AWS với đầy đủ 5 khối:
+  - **Networking**: VPC, Subnet, IGW, NAT Gateway, Security Group.
+  - **Deployment (Runtime)**: ECS Fargate, ALB, API Gateway, VPC Link, RDS.
+  - **CI/CD**: GitHub Actions, ECR, S3 Artifact Bucket.
+  - **Recovery & Backup**: RDS Snapshot, S3 Backup Bucket.
+  - **Monitoring & Observability**: CloudWatch Logs, CloudWatch Metrics,
+    CloudWatch Alarms, SNS, Email/SMS.
