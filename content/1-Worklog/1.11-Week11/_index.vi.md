@@ -29,7 +29,6 @@ pre: " <b> 1.11. </b> "
 ### Kết quả đạt được tuần 11:
 
 - Giải quyết thành công bài toán kết nối `React SPA` với Backend trong private subnet:
-  - Hiểu rõ sự khác biệt giữa `ECS Managed Blue/Green` và `CodeDeploy Blue/Green`.
   - Triển khai `API Gateway (HTTP API)` + `VPC Link` làm cầu nối từ Internet vào
     `ALB internal` trong VPC mà không cần expose Backend ra public.
   - Xác nhận luồng hoạt động: Browser → API Gateway → VPC Link → ALB internal
@@ -39,7 +38,7 @@ pre: " <b> 1.11. </b> "
   - Workflow tự động chạy khi push code lên branch `main`.
   - Các bước: Checkout → Configure AWS credentials (OIDC) → Login ECR →
     Build & Push image → Render Task Definition → Deploy ECS Service.
-  - ECS Service tự động thực hiện `Blue/Green deployment` (ECS Managed)
+  - ECS Service tự động thực hiện `deployment` (ECS Managed)
     sau khi nhận lệnh update từ GitHub Actions.
 
 - Triển khai thành công `Recovery & Backup`:
