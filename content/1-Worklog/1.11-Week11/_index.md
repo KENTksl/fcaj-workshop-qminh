@@ -26,14 +26,13 @@ pre: " <b> 1.11. </b> "
 ### Results:
 
 - Successfully solved connectivity between `React SPA` and a Backend in a private subnet:
-  - Understood the difference between `ECS Managed Blue/Green` and `CodeDeploy Blue/Green`.
   - Implemented `API Gateway (HTTP API)` + `VPC Link` as a bridge from the Internet into the VPC via `ALB internal` without exposing the Backend publicly.
   - Verified the request flow: Browser → API Gateway → VPC Link → ALB internal → ECS Backend → RDS MySQL.
 
 - Successfully set up a `CI/CD pipeline` using `GitHub Actions`:
   - Workflow triggers automatically on pushes to the `main` branch.
   - Steps: Checkout → Configure AWS credentials (OIDC) → Login to ECR → Build & Push image → Render Task Definition → Deploy ECS Service.
-  - ECS Service performs `Blue/Green deployment` (ECS Managed) after receiving updates from GitHub Actions.
+  - ECS Service performs `deployment` (ECS Managed) after receiving updates from GitHub Actions.
 
 - Successfully implemented `Recovery & Backup`:
   - Enabled `RDS Automated Backup` (7-day retention).
