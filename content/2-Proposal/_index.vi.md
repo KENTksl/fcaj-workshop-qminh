@@ -1,116 +1,108 @@
 ---
 title: "Bản đề xuất"
-date: 2026-07-01
+date: 2026-06-01
 weight: 2
 chapter: false
 pre: " <b> 2. </b> "
 ---
 
 # Hạ tầng Điện toán Đám mây GlobalMart
-## Giải pháp Thiết lập Hạ tầng DevOps/Platform Engineering Tiêu chuẩn Production: Tự động hóa CI/CD, Giám sát Đa tầng và Đảm bảo Tính sẵn sàng cao (High Availability)
+## Giải pháp Thiết lập Hạ tầng DevOps/Platform Engineering Tiêu chuẩn: Tự động hóa CI/CD qua GitHub Actions, Mạng Cô lập Đa phân vùng và Giám sát Đa tầng CloudWatch
 
 ### 1. Tóm tắt Dự án 
-GlobalMart là dự án tập trung hoàn toàn vào việc nghiên cứu, thiết kế và triển khai hệ thống hạ tầng đám mây đám mây tiêu chuẩn Production trên nền tảng AWS. Mục tiêu cốt lõi của dự án không nằm ở việc phát triển logic mã nguồn ứng dụng (code phần mềm), mà tập trung vào việc tự động hóa chu trình vận hành phần mềm (DevOps). Dự án áp dụng các kỹ thuật thiết lập hạ tầng Multi-AZ, xây dựng pipeline CI/CD tự động 3 giai đoạn bảo mật, quản lý kết nối dữ liệu thông minh qua Proxy, cấu hình lưu vết nhật ký hệ thống nâng cao (VPC Flow Logs, Container Logs) và giả lập các kịch bản diễn tập khôi phục thảm họa trong thời gian dưới 60 giây.
+GlobalMart là dự án tập trung hoàn toàn vào việc nghiên cứu, thiết kế và triển khai hệ thống hạ tầng đám mây tiêu chuẩn hiện đại trên nền tảng AWS. Dự án tập trung tối ưu hóa chu trình vận hành phần mềm (DevOps) bằng cách loại bỏ các dịch vụ quản lý pipeline cồng kềnh truyền thống trên AWS, thay thế bằng **GitHub Actions** kết hợp xác thực bảo mật **IAM OIDC Role**. Hệ thống áp dụng mô hình phân tách mạng nghiêm ngặt (VPC Public/Private Subnets), định tuyến API tập trung qua **Amazon API Gateway / VPC Link**, cấu hình lưu vết nhật ký hệ thống nâng cao (Container Logs) và thiết lập kịch bản sao lưu an toàn tự động về S3.
 
 ### 2. Phát biểu Bài toán
 ### Vấn đề là gì?
-Trong các dự án phần mềm thực tế, việc thiếu một hạ tầng mạng chuẩn hóa, phân lớp bảo mật lỏng lẻo hoặc phân bổ tài nguyên trên một vùng sẵn sàng đơn lẻ (Single-AZ) luôn là nguyên nhân hàng đầu dẫn đến rủi ro sập hệ thống. Quy trình build và deploy container thủ công bằng tay gây tốn thời gian, dễ rò rỉ mã nguồn và không thể kiểm soát lỗ hổng bảo mật. Thêm vào đó, việc thiếu hụt một hệ thống giám sát tập trung thu thập cả log mạng (VPC Flow Logs) lẫn log ứng dụng làm tê liệt khả năng ứng phó sự cố của đội ngũ kỹ sư khi hệ thống gặp lỗi hoặc bị tấn công.
+Trong các dự án phần mềm thực tế, việc thiết lập hạ tầng mạng lỏng lẻo, phơi bày database ra internet hoặc deploy code thủ công bằng tay luôn là nguyên nhân hàng đầu dẫn đến rủi ro rò rỉ dữ liệu và gián đoạn hệ thống. Việc lưu trữ Access Key/Secret Key của AWS trực tiếp trên các nền tảng CI/CD bên ngoài tiềm ẩn nguy cơ lộ lọt tài khoản đặc quyền. Thêm vào đó, việc thiếu hụt một hệ thống giám sát tập trung làm tê liệt khả năng ứng phó sự cố của đội ngũ kỹ sư khi container ứng dụng gặp lỗi ngầm hoặc bị crash đột ngột.
 
 ### Giải pháp
-Dự án GlobalMart tập trung thiết lập một hạ tầng mạng VPC Multi-AZ (4 Subnets, 2 NAT Gateways) để cô lập hoàn toàn môi trường chạy và lưu trữ dữ liệu. Quy trình phân quyền được siết chặt ngay từ đầu bằng hệ thống IAM Roles chi tiết cho từng tác vụ (Pipeline, Build, ECS, Deploy, RDS Monitoring). Chuỗi tích hợp và triển khai liên tục (CI/CD) được xây dựng tự động qua AWS CodePipeline kết hợp CodeBuild (bật Privileged mode để đóng gói Docker) và CodeDeploy (sử dụng chiến lược Blue/Green bảo mật). Toàn bộ trạng thái dữ liệu được bảo vệ bằng cụm RDS MySQL Multi-AZ đi kèm AWS RDS Proxy giúp tối ưu connection pooling. Hệ thống được giám sát đa lớp bằng CloudWatch Dashboard tập trung kết hợp bộ cảnh báo tự động thông qua Amazon SNS.
+Dự án GlobalMart thiết lập một hạ tầng mạng VPC chuẩn hóa gồm Public Subnet A (chứa Internet ALB, NAT Gateway) và hệ thống Private Subnet để cô lập hoàn toàn môi trường chạy ứng dụng (ECS Fargate) và lưu trữ dữ liệu (RDS). Chuỗi tích hợp và triển khai liên tục (CI/CD) được xây dựng tự động hoàn toàn qua GitHub Actions, ứng dụng cơ chế **IAM OIDC Identity Provider** để cấp quyền bảo mật không cần dùng Key cứng. Toàn bộ traffic đi vào hệ thống được kiểm soát tập trung qua **API Gateway**, đi qua mạng nội bộ nhờ **VPC Link / ALB Internal**. Hệ thống được giám sát đa lớp bằng CloudWatch Dashboard tập trung kết hợp bộ cảnh báo tự động thông qua Amazon SNS gửi thẳng về Email/SMS của quản trị viên.
 
 ### Lợi ích và Hiệu quả Đầu tư
-Dự án mang lại giá trị thực tế cao thông qua việc tối ưu hóa quy trình vận hành và chuẩn hóa bảo mật hạ tầng mà không phụ thuộc vào mã nguồn ứng dụng. Việc tự động hóa quy trình quét bảo mật khi push image (Scan on push tại ECR) giúp phát hiện sớm các lỗ hổng mã độc. Việc áp dụng cơ chế kết nối qua RDS Proxy bảo vệ database khỏi nguy cơ quá tải kết nối. Quan trọng nhất, các kịch bản diễn tập lỗigiúp chứng minh hạ tầng có khả năng tự động phục hồi tự động và chuyển vùng an toàn trong thời gian cực ngắn (<60 giây), giảm thiểu tối đa thời gian gián đoạn hệ thống trên môi trường Production.
+Dự án mang lại giá trị thực tế lớn thông qua việc tinh gọn bộ máy CI/CD giúp cắt giảm chi phí vận hành (không phải trả tiền cho CodeBuild/CodePipeline của AWS). Việc áp dụng cơ chế Scan on push tại ECR giúp kiểm soát mã độc container sớm. Hệ thống đạt trạng thái tự động hóa hoàn chỉnh: Kỹ sư chỉ cần thực hiện `git push` lên GitHub, hệ thống sẽ tự động build image, cập nhật Task Definition Revision mới và kích hoạt **ECS Rolling Update** cập nhật website mà không gây gián đoạn dịch vụ (Zero-downtime).
 
 ### 3. Kiến trúc Giải pháp 
-Kiến trúc dự án được thiết lập đồng bộ trên 2 vùng sẵn sàng Availability Zone A và Availability Zone B nhằm đạt tiêu chí High Availability. Các tầng mạng, điều phối container, định tuyến và lưu trữ dữ liệu đều được phân tách rõ ràng qua ma trận phân quyền Security Groups bảo mật. Chi tiết sơ đồ hạ tầng được mô tả dưới đây:
+Kiến trúc dự án được thiết lập đồng bộ trên nền tảng AWS Fargate (Serverless Container) và mô hình mạng phân lớp bảo mật qua ma trận Security Groups. Chi tiết sơ đồ hạ tầng được mô tả dưới đây:
 
-![Kiến trúc Triển khai GlobalMart](/images/2-Proposal/GlobalMart.png)
+![Kiến trúc Triển khai GlobalMart](/images/2-Proposal/globalmart.png)
 
 ### Các Dịch vụ AWS Được Sử Dụng
-- **AWS VPC & IAM**: Thiết lập mạng lõi 4 Subnets, 2 NAT Gateways tránh SPOF, 2 Route Tables Private riêng biệt và ma trận phân quyền IAM Roles chi tiết.
-- **AWS CodePipeline, CodeBuild & CodeDeploy**: Bộ ba dịch vụ xây dựng pipeline tự động 3 giai đoạn (Source --> Build --> Deploy) và triển khai Blue/Green an toàn.
-- **Amazon ECR & S3 Artifact Bucket**: Kho lưu trữ Docker Image tích hợp quét bảo mật (Scan on push) và lưu trữ trạng thái build có bật vòng đời (Lifecycle policy 30 ngày) kèm kiểm soát phiên bản (Versioning).
-- **Amazon ECS Cluster & AWS Fargate**: Điều phối container không máy chủ (Serverless) tích hợp tính năng theo dõi chuyên sâu Container Insights.
-- **AWS Application Load Balancer (ALB)**: Hệ thống 2 bộ ALB độc lập (Public ALB span 2 AZ với 2 Target Groups cho Blue/Green; Internal ALB span 2 AZ để kết nối Frontend và Backend nội bộ).
-- **Amazon RDS for MySQL, Secrets Manager & RDS Proxy**: Cụm database Multi-AZ lưu trữ thông tin bảo mật qua Secrets Manager, giao tiếp gián tiếp bắt buộc qua lớp RDS Proxy để tối ưu failover transparent.
-- **Amazon CloudWatch & Amazon SNS**: Bộ đôi thu thập tập trung logs/metrics đa lớp và phân phối cảnh báo tự động qua Email/SMS.
+- **AWS VPC & IAM OIDC**: Thiết lập mạng lõi gồm Public Subnet (định tuyến Internet) và các Private Subnet cô lập, kết hợp cấu hình Identity Provider cho phép GitHub Actions thiết lập liên kết tin cậy bảo mật.
+- **GitHub Actions (Build & Update Service)**: Đóng vai trò là công cụ CI/CD cốt lõi, thay thế hoàn toàn cho CodePipeline, CodeBuild và CodeDeploy của AWS để tự động hóa toàn bộ chu trình.
+- **Amazon ECR & S3 Artifact Bucket**: Kho lưu trữ Docker Image tích hợp quét bảo mật (Scan on push) và lưu trữ trạng thái build hệ thống.
+- **Amazon ECS Cluster & AWS Fargate**: Điều phối container không máy chủ (Serverless) quản lý độc lập hai dịch vụ `globalmart-frontend-task` và `globalmart-backend-task`.
+- **AWS Application Load Balancer (ALB)**: Hệ thống 2 bộ ALB độc lập (ALB-Internet-Facing tiếp nhận traffic public vào Frontend; ALB Internal tiếp nhận traffic nội bộ điều hướng vào Backend).
+- **Amazon API Gateway & VPC Link**: Cổng kiểm soát API tập trung, kết hợp VPC Link để chuyển tiếp traffic an toàn từ môi trường Public vào Load Balancer nội bộ nằm trong vùng Private.
+- **Amazon RDS Single AZ**: Hệ thống cơ sở dữ liệu MySQL/PostgreSQL được đặt ẩn hoàn toàn trong vùng Private Subnet B, chặn tuyệt đối mọi hành vi truy cập trực tiếp từ bên ngoài Internet.
+- **Amazon CloudWatch & Amazon SNS**: Bộ đôi thu thập tập trung logs/metrics đa lớp (ECS, ALB, RDS) và phân phối cảnh báo tự động qua Email/SMS khi hệ thống quá tải.
 
 ### Thiết kế Thành phần 
-- **Hạ tầng Mạng & Bảo mật**: Thiết lập mạng VPC gồm 2 Public Subnet và 2 Private Subnet. Sử dụng 6 Security Groups riêng biệt để cô lập từng thành phần (bao gồm sg-rds-proxy). Ứng dụng Frontend được xếp vào phân vùng mạng Private Subnet A (AZ-A) và Backend nằm tại Private Subnet B (AZ-B).
-- **Chuỗi Tự động hóa CI/CD**: Cấu hình các file khai báo `buildspec.yml`, `appspec.yml`, `taskdef.json` trực tiếp trong GitHub repo để CodePipeline điều phối. Quá trình build trong CodeBuild chạy ở Privileged mode phục vụ đóng gói Docker Image Frontend và Backend.
-- **Kết nối & Vận hành Dữ liệu**: Khởi tạo DB Subnet Group phủ qua cả 2 AZ. Tầng Backend chỉ kết nối an toàn với database qua Endpoint của RDS Proxy, chặn tuyệt đối mọi hành vi kết nối trực tiếp vào RDS MySQL.
-- **Giám sát & Lưu vết Nhật ký**: CloudWatch Logs thu thập toàn bộ dữ liệu từ Container, dữ liệu luồng mạng qua VPC Flow Logs và vết định tuyến tại ALB. Cấu hình CloudWatch Dashboard Multi-AZ tập trung hiển thị trực quan qua 9 widgets chỉ số.
-- **Dự phòng & Diễn tập Khôi phục**: Hệ thống tự động thiết lập chính sách sao lưu RDS Automated Backup trong vòng 7 ngày và chuyển dịch an toàn về S3 Backup Bucket độc lập.
+- **Hạ tầng Mạng & Bảo mật Phân lớp**: Hệ thống bao gồm 3 Security Groups riêng biệt để cô lập dòng dữ liệu. Ứng dụng Frontend và Backend được xếp vào phân vùng mạng Private Subnet A nhằm che giấu IP gốc, Database nằm riêng biệt tại Private Subnet B.
+- **Chuỗi Tự động hóa CI/CD qua GitHub Actions**: Cấu hình tệp workflow `.yml` xử lý tuần tự: Checkout code -> Giả lập AWS Credentials qua OIDC Role -> Build và tag Docker Image bằng Git Commit SHA -> Push lên ECR -> Tự động sinh file JSON Task Definition mới -> Kích hoạt lệnh `update-service` trên ECS.
+- **Kết nối & Vận hành Dữ liệu**: Người dùng gọi API qua API Gateway -> Đi qua VPC Link -> Đến ALB Internal -> Đến ECS Backend -> Truy vấn trực tiếp vào Database RDS Single AZ thông qua kết nối mạng nội bộ bảo mật.
+- **Giám sát & Nhật ký Tập trung**: CloudWatch Logs thu thập toàn bộ dữ liệu nhật ký dòng lệnh (Console logs) từ các container Frontend/Backend, vết định tuyến tại ALB và trạng thái Performance của RDS để hiển thị trực quan lên CloudWatch Dashboard tập trung.
 
 ### 4. Triển khai Kỹ thuật
 **Các Giai đoạn Triển khai**
 Tiến trình thực hiện dự án được lên kế hoạch chi tiết theo thời gian 1 tháng, tập trung hoàn toàn vào các bước cấu hình, tích hợp hạ tầng hệ thống:
-- **Tuần 1 - Cốt lõi Mạng & Bảo mật Phân lớp**: Nghiên cứu yêu cầu, thiết lập hệ thống IAM Roles phân quyền chi tiết. Khởi tạo mạng lõi VPC Multi-AZ gồm 4 Subnets, cấu hình 2 NAT Gateways độc lập để tránh điểm lỗi đơn lẻ (SPOF) và gán 2 Route Tables Private riêng cho từng AZ. Xây dựng ma trận bảo mật đầu quy trình với 6 Security Groups (bao gồm sg-rds-proxy).
-- **Tuần 2 - Đóng gói & Chuẩn bị Tự động hóa CI/CD**: Khởi tạo các kho lưu trữ ECR Frontend và Backend có bật tính năng scan on push. Viết các file cấu hình và định nghĩa pipeline (`buildspec.yml`, `appspec.yml`, `taskdef.json`). Khởi tạo S3 Artifact Bucket có bật tính năng versioning cùng quy trình vòng đời (lifecycle 30 ngày). Cấu hình CodeBuild Project bật Privileged mode để đóng gói Docker.
-- **Tuần 3 - Khởi tạo Runtime Container & Định tuyến Lưu lượng**: Cấu hình chuỗi CodePipeline hoàn chỉnh 3 giai đoạn. Khởi tạo cụm ECS Cluster Fargate tích hợp Container Insights cùng hệ thống Task Definitions chi tiết. Thiết lập cặp đôi ALB Public (gắn 2 Target Groups phục vụ Blue/Green) và ALB Internal chạy song song trên 2 AZ. Triển khai cấu hình CodeDeploy nâng cao.
-- **Tuần 4 - Thiết lập Tầng Dữ liệu HA, Hệ thống Giám sát & Diễn tập Thảm họa**: Tạo DB Subnet Group, thiết lập hệ thống RDS MySQL Multi-AZ (Primary AZ-A + Standby AZ-B) bảo mật thông tin bằng Secrets Manager. Tích hợp cấu hình RDS Proxy quản lý connection pooling. Đồng thời, cấu hình CloudWatch Logs, Dashboard tập trung (9 widgets) cùng bộ 8 Alarms cảnh báo tự động thông qua SNS. Tiến hành chạy kịch bản diễn tập DR Drill (RDS Failover dưới 60 giây) và thực hiện End-to-End Test toàn hệ thống trước khi nghiệm thu.
+- **Tuần 1 - Cốt lõi Mạng & Thiết lập IAM OIDC Role**: Khởi tạo mạng lõi VPC gồm hệ thống Public Subnet (chứa ALB Internet-Facing, NAT Gateway) và các Private Subnet cô lập. Cấu hình Identity Provider (IdP) trên IAM gắn với OIDC Provider của GitHub, tạo IAM Role cho phép tài khoản GitHub Actions có quyền tương tác với ECR và ECS mà không cần Access Key cứng.
+- **Tuần 2 - Đóng gói & Xây dựng Workflow GitHub Actions**: Khởi tạo các kho lưu trữ ECR Frontend và Backend có bật tính năng scan on push. Viết tệp workflow cấu hình `.github/workflows/deploy.yml` trên GitHub để tự động hóa luồng chạy: sử dụng lệnh docker build, tag image theo mã định danh `${{ github.sha }}` và thực hiện đẩy lên Amazon ECR.
+- **Tuần 3 - Khởi tạo Runtime Container, API Gateway & Định tuyến**: Khởi tạo cụm ECS Cluster Fargate cùng hệ thống Task Definitions chi tiết. Thiết lập ALB Internet-Facing (trỏ vào Target Group Frontend) và ALB Internal (trỏ vào Target Group Backend). Cấu hình API Gateway kết hợp VPC Link kết nối trực tiếp với ALB Internal để mở đường dẫn API bảo mật cho ứng dụng.
+- **Tuần 4 - Tầng Dữ liệu, Hệ thống Giám sát & Báo động SNS**: Khởi tạo cấu hình RDS Single AZ nằm trong Private Subnet B, truyền biến môi trường kết nối an toàn từ Backend. Cấu hình hệ thống lưu vết nhật ký CloudWatch Logs, Dashboard tập trung hiển thị trực quan các chỉ số CPU/Memory Utilization của Container và hiệu năng RDS. Thiết lập bộ 6 CloudWatch Alarms cảnh báo tự động thông qua Amazon SNS gửi mail về điện thoại khi có sự cố quá tải hệ thống.
 
 **Yêu cầu Kỹ thuật**
-- **Kỹ năng Cấu hình Hạ tầng & IaC**: Hiểu rõ cách liên kết mạng, viết và tối ưu hóa các tệp cấu hình trung gian cho hệ thống container (`taskdef.json`) và điều phối pipeline (`appspec.yml`).
-- **Tư duy Bảo mật & Giám sát**: Năng lực phân tách quyền hạn (Least Privilege), hiểu rõ cơ chế hoạt động của VPC Flow Logs và thiết lập logic ma trận lọc điều kiện cảnh báo (CloudWatch Alarms) tương ứng với các lỗi thảm họa hệ thống đám mây.
+- **Kỹ năng Tự động hóa với GitHub Actions**: Hiểu rõ cách viết workflow YAML, quản lý GitHub Secrets bảo mật, khai báo biến môi trường và sử dụng AWS CLI kết hợp Python để xào nấu Task Definition (`register-task-definition`).
+- **Tư duy Mạng và Định tuyến Nâng cao**: Hiểu rõ cơ chế định tuyến qua API Gateway, VPC Link, cách phân quyền Security Group chéo (cho phép ALB truy cập Container, cho phép Backend kết nối vào đúng Port của Database RDS).
 
 ### 5. Lộ trình & Cột mốc 
 **Tiến độ Dự án**
 Lộ trình thực hiện dự án được chia nhỏ và bám sát theo tiến độ triển khai hạ tầng thực tế trong vòng 1 tháng:
-- Cột mốc 1 (Cuối Tuần 1): Hoàn thành thiết lập toàn bộ lõi mạng bảo mật VPC Multi-AZ, ma trận Security Groups nhằm loại bỏ điểm lỗi đơn lẻ ở tầng mạng biên.
-- Cột mốc 2 (Cuối Tuần 2): Hoàn thành cấu hình và tích hợp thành công các kho lưu trữ hình ảnh container (ECR), chuẩn bị xong các file cấu hình định nghĩa để tự động hóa luồng đóng gói.
-- Cột mốc 3 (Cuối Tuần 3): Chuỗi CodePipeline tự động hóa hoàn toàn luồng CI/CD đi vào hoạt động ổn định, triển khai thành công cụm ECS Fargate và cặp bộ cân bằng tải ALB đa vùng.
-- Cột mốc 4 (Cuối Tuần 4): Đưa tầng dữ liệu an toàn Multi-AZ, hệ thống RDS Proxy và bộ giám sát đa tầng CloudWatch vào hoạt động. Thực hiện thực tế thành công các kịch bản khôi phục thảm họa (DR Drill) dưới 60 giây và nghiệm thu dự án.
+- Cột mốc 1 (Cuối Tuần 1): Hoàn thành thiết lập toàn bộ lõi mạng bảo mật VPC, cấu hình thông suốt liên kết bảo mật IAM OIDC Role giữa GitHub và AWS.
+- Cột mốc 2 (Cuối Tuần 2): Hoàn thành cấu hình workflow GitHub Actions, thực hiện đóng gói và push thành công các phiên bản Docker Image Frontend/Backend lên Amazon ECR.
+- Cột mốc 3 (Cuối Tuần 3): Triển khai thành công cụm ECS Fargate, cấu hình xong hệ thống API Gateway, VPC Link và các bộ cân bằng tải ALB đa tầng, đảm bảo định tuyến web thông suốt.
+- Cột mốc 4 (Cuối Tuần 4): Đưa tầng dữ liệu RDS Single AZ vào hoạt động, kích hoạt hệ thống giám sát đa lớp CloudWatch Dashboard và bộ cảnh báo tự động qua SNS. Thực hiện thành công kịch bản kiểm tra kích hoạt báo động gửi mail thực tế và nghiệm thu dự án.
 
 ### 6. Ước tính Ngân sách (Budget Estimation)
 ### Chi phí hạ tầng
 - Dịch vụ AWS:
-    - Amazon ECS Fargate (Frontend): $8.50/tháng (2 tasks, 0.25 vCPU, 512 MB, chạy 24/7).
-    - Amazon ECS Fargate (Backend): $20.73/tháng (2 tasks, 0.5 vCPU, 1 GB, chạy 24/7).
-    - Public IPv4 (ECS + ALB + NAT): $29.20/tháng (8 địa chỉ IP công khai × $0.005/giờ).
-    - NAT Gateway (AZ-A): $43.37/tháng (730 giờ, ~5 GB dữ liệu xử lý).
-    - NAT Gateway (AZ-B): $43.37/tháng (730 giờ, ~5 GB dữ liệu xử lý).
+    - Amazon ECS Fargate (Frontend): $4.25/tháng (1 task, 0.25 vCPU, 512 MB, chạy 24/7).
+    - Amazon ECS Fargate (Backend): $10.36/tháng (1 task, 0.5 vCPU, 1 GB, chạy 24/7).
+    - Public IPv4 (ALB + NAT): $7.30/tháng (2 địa chỉ IP công khai × $0.005/giờ).
+    - NAT Gateway: $43.37/tháng (730 giờ, ~5 GB dữ liệu xử lý).
     - ALB Internet-facing: $24.24/tháng (730 giờ, ~1 LCU/giờ).
     - ALB Internal: $19.40/tháng (730 giờ, LCU tối thiểu).
+    - Amazon API Gateway (HTTP API): $1.00/tháng (~1 triệu requests/tháng).
     - Data Transfer Out: $0.45/tháng (~5 GB truyền ra Internet).
-    - Data Transfer Cross-AZ: $0.10/tháng (~10 GB từ Frontend sang Backend khác AZ).
-    - RDS MySQL Multi-AZ (db.t3.micro): $34.84/tháng (Primary + Standby, chạy 24/7).
-    - RDS Storage: $5.52/tháng (20 GB gp2 × 2 AZ).
-    - RDS Proxy: $21.90/tháng (tối thiểu 2 vCPU, 730 giờ).
-    - Secrets Manager: $0.41/tháng (1 secret, lời gọi API).
-    - RDS Snapshot Export to S3: $0.24/tháng (~20 GB xuất ra).
-    - CodePipeline: $1.00/tháng (1 pipeline đang hoạt động).
-    - CodeBuild: $1.25/tháng (~50 lần build × 5 phút, general1.small).
+    - Amazon RDS Single AZ (db.t3.micro): $17.42/tháng (Chạy 24/7 môi trường Dev/Test).
+    - RDS Storage: $2.76/tháng (20 GB gp2).
     - Amazon ECR (Frontend + Backend): $0.58/tháng (4 GB lưu trữ, ~100 lần pull).
-    - S3 Artifact Bucket: $0.04/tháng (1 GB, 1.000 requests).
-    - S3 Backup Bucket: $0.58/tháng (20 GB, chuyển sang Glacier sau 30 ngày).
-    - CloudWatch Logs: $3.95/tháng (5 GB ingestion, logs container + ALB + VPC Flow).
-    - CloudWatch Metrics & Alarms: $6.60/tháng (20 metrics, 8 alarms).
-    - CloudWatch Dashboard: $3.00/tháng (1 dashboard, 9 widgets).
-    - AWS Backup: $1.95/tháng (lịch backup hàng ngày + hàng tuần, ~30 GB vault).
-    - Amazon SNS: $0.00/tháng (dưới 1.000 email thông báo, free tier).
-    - Amazon EventBridge: $0.00/tháng (dưới 1 triệu sự kiện/tháng, free tier).
+    - Backup Bucket (S3): $0.58/tháng (20 GB lưu trữ bản chụp snapshot/export).
+    - CloudWatch Logs: $3.95/tháng (5 GB ingestion, logs container + ALB).
+    - CloudWatch Metrics & Alarms: $4.95/tháng (15 metrics, 6 alarms).
+    - CloudWatch Dashboard: $3.00/tháng (1 dashboard, 5 widgets chính).
+    - Amazon SNS: $0.00/tháng (dưới 1.000 email thông báo, nằm trong AWS Free Tier).
+    - GitHub Actions Runner: $0.00/tháng (Sử dụng gói 2.000 phút miễn phí/tháng của GitHub cho repository private).
 
-Tổng: $271.22/tháng
+Tổng cộng: **$187.01 / tháng** 
 
 ### 7. Đánh giá Rủi ro
 #### Ma trận Rủi ro
-- Lỗ hổng bảo mật trong Docker Image: Tác động trung bình, xác suất xảy ra trung bình.
-- Quá tải hoặc cạn kiệt kết nối database: Tác động cao, xác suất xảy ra trung bình.
-- Lỗi phân quyền chéo giữa các dịch vụ (IAM Misconfiguration): Tác động cao, xác suất xảy ra thấp.
+- Lỗi vỡ ký tự hoặc sai cấu trúc JSON khi tự động tạo Task Definition qua CLI: Tác động trung bình, xác suất xảy ra trung bình.
+- Lỗi lộ lọt dữ liệu do mở nhầm cổng Database ra Internet: Tác động cao, xác suất xảy ra thấp.
+- Lỗi nghẽn hoặc treo luồng deploy do Target Group Health Check cấu hình sai mã trạng thái (Success codes): Tác động trung bình, xác suất xảy ra trung bình.
 
 #### Chiến lược Giảm thiểu
-- Lỗ hổng Image: Được xử lý triệt để nhờ cơ chế Scan on push tự động của ECR để phát hiện mã độc ngay khi kết thúc bước Build.
-- Quá tải kết nối: Được kiểm soát hoàn toàn thông qua lớp quản lý tập trung AWS RDS Proxy (connection pooling) giúp gom cụm và tái sử dụng kết nối thông minh.
-- Lỗi phân quyền: Áp dụng nguyên tắc đặc quyền tối thiểu (Principle of Least Privilege), kiểm tra ma trận Security Groups và cấu hình chặt chẽ IAM Roles chuyên biệt cho từng hạng mục dịch vụ đám mây từ ngày đầu tiên.
+- Lỗi tạo Task Definition: Được xử lý triệt để nhờ việc xuất chuỗi cấu hình JSON từ script Python ra file tạm `*.json` trước khi nạp vào lệnh `--cli-input-json` của AWS CLI trong workflow.
+- Bảo mật Database: RDS được đặt hoàn toàn trong Private Subnet B không có internet gateway, đồng thời Security Group của RDS chỉ mở cổng duy nhất cho phép IP nội bộ đi từ Security Group của ECS Backend Task.
+- Lỗi nghẽn Health Check: Cấu hình nới lỏng mã thành công thành `200-499` trong Target Group (`tg-backend` và `tg-frontend`) để chấp nhận mọi phản hồi khởi động ban đầu từ Spring Boot/Node.js.
 
 #### Kế hoạch Dự phòng 
-- Thực hiện DR Drill định kỳ: Giả lập lỗi sập database chính để kích hoạt tính năng chuyển vùng tự động Failover của RDS Multi-AZ sang vùng Standby với thời gian gián đoạn mục tiêu dưới 60 giây.
-- Kích hoạt phục hồi trạng thái từ các bản sao lưu tự động S3 Backup Bucket trong trường hợp gặp sự cố toàn vẹn dữ liệu nghiêm trọng.
+- Kích hoạt lịch chụp RDS Snapshot thủ công trước mỗi đợt push code lớn, đảm bảo khả năng quay lui dữ liệu (Rollback) về trạng thái ổn định gần nhất trong vòng dưới 5 phút nếu code mới làm lỗi cấu trúc DB.
+- Thiết lập kịch bản xuất bản sao lưu tự động (Backup Export) sang hệ thống S3 Backup Bucket độc lập có bật tính năng lưu trữ vòng đời để tối ưu chi phí lưu trữ lâu dài.
 
 ### 8. Kết quả Mong đợi
 #### Cải tiến Kỹ thuật:
-Xây dựng thành công một hạ tầng đám mây tự động hoàn toàn đạt tiêu chuẩn Production thực tế: tự động hóa chuỗi bàn giao mã nguồn 3 giai đoạn bảo mật, thiết lập mạng lưới Multi-AZ High Availability chống điểm lỗi đơn lẻ, tối ưu hóa giao tiếp dữ liệu qua Proxy và làm chủ hệ thống giám sát, cảnh báo sự cố chủ động trước khi lỗi ảnh hưởng tới trải nghiệm của người dùng cuối.
+Xây dựng thành công một hạ tầng DevOps tự động hóa, tinh gọn và đạt tiêu chuẩn bảo mật hiện đại: làm chủ luồng xác thực IAM OIDC Role không dùng Key, kiểm soát traffic an toàn qua API Gateway/ALB, và thiết lập thành công hệ thống giám sát CloudWatch Dashboard kết hợp cảnh báo chủ động qua Email khi xảy ra sự cố quá tải container.
 #### Giá trị Lâu dài
-Mang lại một tài liệu mẫu chuẩn chỉnh (Blueprint) về mặt kiến trúc hạ tầng, quy trình DevOps và Platform Engineering thực tế cho doanh nghiệp; phục vụ như một nền tảng hạ tầng bảo mật vững chắc để triển khai nhanh chóng các hệ thống dịch vụ full-stack hoặc microservices phức tạp sau này.
+Mang lại một tài liệu mẫu kiến trúc (Blueprint) chuẩn chỉnh về giải pháp xây dựng chu trình CI/CD tích hợp trực tiếp giữa GitHub Actions và AWS ECS Fargate; tạo tiền đề hạ tầng vững chắc, dễ bảo trì và tối ưu chi phí để doanh nghiệp sẵn sàng triển khai các ứng dụng Microservices full-stack sau này.
