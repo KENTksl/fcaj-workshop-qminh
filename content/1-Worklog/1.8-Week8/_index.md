@@ -1,5 +1,5 @@
 ---
-title: "Worklog Week 8"
+title: "Week 8 Worklog"
 date: 2026-06-08
 weight: 8
 chapter: false
@@ -41,4 +41,4 @@ pre: " <b> 1.8. </b> "
 
 #### Proposed Architecture Model for the Final Project
 
-![GlobalMart architecture model](/1-worklog/1.8-week8/GlobalMart.png)
+![GlobalMart architecture model](/images/2-Proposal/globalmart.png)

@@ -41,4 +41,4 @@ pre: " <b> 1.8. </b> "
 
 #### Mô hình kiến trúc đề xuất cho project cuối kỳ
 
-![Mo hinh kien truc GlobalMart](/1-worklog/1.8-week8/GlobalMart.png)
+![Mo hinh kien truc GlobalMart](/images/2-Proposal/globalmart.png)

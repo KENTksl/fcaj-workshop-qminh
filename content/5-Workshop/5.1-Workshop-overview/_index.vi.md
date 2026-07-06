@@ -1,9 +1,9 @@
 ---
-title : "Tổng quan workshop"
-date : 2026-06-30
-weight : 1
-chapter : false
-pre : " <b> 5.1. </b> "
+title: "Tổng quan workshop"
+date: 2026-06-30
+weight: 1
+chapter: false
+pre: " <b> 5.1. </b> "
 ---
 
 ## Mục tiêu của workshop

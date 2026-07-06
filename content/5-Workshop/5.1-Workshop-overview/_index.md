@@ -1,9 +1,9 @@
 ---
-title : "Workshop overview"
-date : 2026-06-30
-weight : 1
-chapter : false
-pre : " <b> 5.1. </b> "
+title: "Workshop overview"
+date: 2026-06-30
+weight: 1
+chapter: false
+pre: " <b> 5.1. </b> "
 ---
 
 ## Workshop objectives
