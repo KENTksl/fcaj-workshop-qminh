@@ -61,6 +61,9 @@ When the backend CPU utilization exceeds the configured threshold, Amazon CloudW
 
 ---
 
-## Expected Results
+## Live Demo Video
+**Demo Video:** [Watch the demo video](https://drive.google.com/file/d/1oNYPaeILVUyJaDqz2qYWPu9UwtY6KnCG/view)
 
-The GlobalMart application has been successfully deployed to AWS through an automated CI/CD pipeline. The application is running correctly on Amazon ECS, deployment notifications are delivered via email, and the monitoring system can automatically detect abnormal conditions and notify administrators through Amazon CloudWatch and Amazon SNS.
+## Project Results
+1. **Project Source Code - GitHub:** [https://github.com/KENTksl/globalmart-production-cicd](https://github.com/KENTksl/globalmart-production-cicd)
+2. **Website:** [http://alb-internet-facing-1015453304.ap-southeast-1.elb.amazonaws.com/](http://alb-internet-facing-1015453304.ap-southeast-1.elb.amazonaws.com/)

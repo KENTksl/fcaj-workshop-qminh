@@ -30,6 +30,9 @@ Mục `5.6` được tổ chức theo các nhóm kết quả thực tế:
 ![Overview](/images/5-Workshop/Workshop-img/result-7.jpg)
 
 
-## Kết quả mong đợi
+## Video demo thực tế
+**Demo Video:** [Watch the demo video](https://drive.google.com/file/d/1oNYPaeILVUyJaDqz2qYWPu9UwtY6KnCG/view)
 
-Dự án đã được triển khai thành công và vận hành ổn định trên AWS.
+## Kết quả dự án
+1. **Mã nguồn dự án - Github:** [https://github.com/KENTksl/globalmart-production-cicd](https://github.com/KENTksl/globalmart-production-cicd)
+2. **Website:** [http://alb-internet-facing-1015453304.ap-southeast-1.elb.amazonaws.com/](http://alb-internet-facing-1015453304.ap-southeast-1.elb.amazonaws.com/)
