@@ -6,7 +6,9 @@ chapter: false
 ---
 
 # Báo cáo thực tập
+
 ### Thông tin sinh viên:
+
 &emsp; **Họ và tên:** Nguyễn Huỳnh Quang Minh
 
 &emsp; **Số điện thoại:** 0779567822
@@ -19,15 +21,13 @@ chapter: false
 
 &emsp; **Lớp:** 22DTHC3
 
-&emsp; **Công ty thực tập:** Công ty TNHH Amazon Web Services Vietnam
+&emsp; **Công ty thực tập:** Công ty TNHH Amazon Web Services Viet Nam
 
-&emsp; **Vị trí thực tập:** FCAJ Cloud Intern
+&emsp; **Vị trí thực tập:** Workforce Bootcamp - First Cloud AI Journey
 
 &emsp; **Thời gian thực tập:** Từ ngày 17/4/2026 đến ngày 10/7/2026
 
 ![Ảnh đại diện của bạn](/images/avatar.png)
-
-
 
 ### Nội dung báo cáo
 

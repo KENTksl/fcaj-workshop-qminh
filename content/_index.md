@@ -5,11 +5,10 @@ weight: 1
 chapter: false
 ---
 
-    
 # Internship Report
 
-
 ### Student Information:
+
 &emsp; **Full Name:** Nguyen Huynh Quang Minh
 
 &emsp; **Phone Number:** 0779567822
@@ -24,7 +23,7 @@ chapter: false
 
 &emsp; **Internship Company:** Amazon Web Services Vietnam Co., Ltd.
 
-&emsp; **Internship Position:** FCAJ Cloud Intern
+&emsp; **Internship Position:** Workforce Bootcamp - First Cloud AI Journey
 
 &emsp; **Internship Duration:** From 17/04/2026 to 10/07/2026
 
